@@ -1,70 +1,132 @@
-# program inspired by Andrej Karpathy (https://github.com/karpathy/ng-video-lecture) (https://github.com/karpathy/micrograd)
-# data set taken from https://github.com/karpathy/char-rnn/blob/master/data/tinyshakespeare/input.txt
+# NOTE: based on tinygrad/examples/transformer.py
 
+#!/usr/bin/env python3
 import numpy as np
-from typing import List, Callable
-from tinygrad import Tensor, TinyJit, nn, GlobalCounters, dtypes
-from tinygrad.helpers import getenv, colored, trange
-import matplotlib.pyplot as plt
-import time
 import random
+import math
 
-###### [ 1/3 : MODEL INITIALIZATION ] ######
+from tinygrad.nn.state import get_parameters
+from tinygrad.nn.optim import Adam
 
-class GPTLanguageModel:
+from tinygrad.tensor import Tensor
+from tinygrad.helpers import CI, trange
+from tinygrad.engine.jit import TinyJit
+  
+class TransformerBlock:
+  def __init__(self, embed_dim, num_heads, ff_dim, prenorm=False, act=lambda x: x.relu(), dropout=0.1):
+    assert embed_dim % num_heads == 0, "embed_dim must be divisible by num_heads"
 
-    def __init__(self):
-        self.emb_size = 64
-        self.head_size = 64
-        
-        self.tok_emb_table = Tensor(np.random.randn(vocab_size, self.emb_size) * 0.02, dtype=dtypes.float32)
-        self.pos_emb_table = Tensor(np.random.randn(block_size, self.emb_size) * 0.02, dtype=dtypes.float32)
+    self.num_heads = num_heads
+    self.head_size = embed_dim // num_heads
+    self.prenorm, self.act = prenorm, act
+    self.dropout = dropout
 
-        self.w_q = Tensor(np.random.randn(1, self.emb_size, self.head_size) * 0.02, dtype=dtypes.float32)
-        self.w_k = Tensor(np.random.randn(1, self.emb_size, self.head_size) * 0.02, dtype=dtypes.float32)
-        self.w_v = Tensor(np.random.randn(1, self.emb_size, self.head_size) * 0.02, dtype=dtypes.float32)
-        self.w_o = Tensor(np.random.randn(1, self.head_size, self.emb_size) * 0.02, dtype=dtypes.float32)
+    self.query = (Tensor.scaled_uniform(embed_dim, embed_dim), Tensor.zeros(embed_dim))
+    self.key = (Tensor.scaled_uniform(embed_dim, embed_dim), Tensor.zeros(embed_dim))
+    self.value = (Tensor.scaled_uniform(embed_dim, embed_dim), Tensor.zeros(embed_dim))
 
-        self.w1 = Tensor(np.random.randn(1, self.emb_size, self.emb_size*4) * 0.02, dtype=dtypes.float32)
-        self.b1 = Tensor(np.zeros((1, 1, self.emb_size*4)), dtype = self.w1.dtype)
-        self.w2 = Tensor(np.random.randn(1, self.emb_size*4, self.emb_size) * 0.02, dtype=dtypes.float32)
-        self.b2 = Tensor(np.zeros((1, 1, self.emb_size)), dtype = self.w2.dtype)
+    self.out = (Tensor.scaled_uniform(embed_dim, embed_dim), Tensor.zeros(embed_dim))
 
-        self.w_final = Tensor(np.random.randn(1, self.emb_size, vocab_size) * 0.02, dtype=dtypes.float32)
+    self.ff1 = (Tensor.scaled_uniform(embed_dim, ff_dim), Tensor.zeros(ff_dim))
+    self.ff2 = (Tensor.scaled_uniform(ff_dim, embed_dim), Tensor.zeros(embed_dim))
 
-    def __call__(self, x) -> Tensor:
+    self.ln1 = (Tensor.ones(embed_dim), Tensor.zeros(embed_dim))
+    self.ln2 = (Tensor.ones(embed_dim), Tensor.zeros(embed_dim))
 
-        tok_emb = self.tok_emb_table[x].reshape((-1, block_size, self.emb_size))    # (batch_size, block_size, self.emb_size)
-        pos_emb = self.pos_emb_table[Tensor.arange(block_size)]    # (1, block_size, self.emb_size)
-        x = tok_emb + pos_emb    # (batch_size, block_size, self.emb_size)
-        Q, K, V = x @ self.w_q, x @ self.w_k, x @ self.w_v    # (batch_size, block_size, self.head_size)
-        qk = Q @ K.transpose(-2, -1) * self.head_size**-0.5    # (batch_size, block_size, block_size)
-        #np.putmask(attention.data, np.tile(np.tri(block_size), (attention.data.shape[0], 1, 1)) == 0, float('-inf'))
-        qk_masked = qk + Tensor.full(qk.shape, float("-inf")).triu().realize()
-        attention = qk_masked.softmax(-1) @ V    # (batch_size, block_size, self.head_size)
-        y = attention @ self.w_o + x    # (batch_size, block_size, self.emb_size)
-        z = (y @ self.w1 + self.b1).relu() @ self.w2 + self.b2 + y    # (batch_size, block_size, self.emb_size)
-        return z @ self.w_final    # (batch_size, block_size, self.vocab_size)
+  def attn(self, x):
+    # x: (bs, time, embed_dim) -> (bs, time, embed_dim)
+    query, key, value = [x.linear(*y).reshape(shape=(x.shape[0], -1, self.num_heads, self.head_size)).transpose(1,2) for y in [self.query, self.key, self.value]]
+    attention = Tensor.scaled_dot_product_attention(query, key, value, is_causal=True).transpose(1,2)
+    return attention.reshape(shape=(x.shape[0], -1, self.num_heads * self.head_size)).linear(*self.out)
 
-###### [ 2/3 : HELPER FUNCTIONS ] ######
+  def __call__(self, x):
+    if self.prenorm:
+      x = x + self.attn(x.layernorm().linear(*self.ln1)).dropout(self.dropout)
+      x = x + self.act(x.layernorm().linear(*self.ln2).linear(*self.ff1)).linear(*self.ff2).dropout(self.dropout)
+    else:
+      x = x + self.attn(x).dropout(self.dropout)
+      x = x.layernorm().linear(*self.ln1)
+      x = x + self.act(x.linear(*self.ff1)).linear(*self.ff2).dropout(self.dropout)
+      x = x.layernorm().linear(*self.ln2)
+    return x
 
-def get_batch(data):
-    xi = [random.randint(0, len(data)-block_size-1) for i in range(batch_size)]
-    xs = [data[i:i+block_size] for i in xi]
-    ys = [data[i+1:i+1+block_size] for i in xi]
-    return Tensor(xs), Tensor(ys) # (batch_size, block_size)
+class Transformer:
+  def __init__(self, syms, maxlen, layers, embed_dim, num_heads, ff_dim):
+    self.maxlen, self.syms = maxlen, syms
+    self.embed = Tensor.scaled_uniform(maxlen+syms, embed_dim, requires_grad=False)
+    self.tbs = [TransformerBlock(embed_dim, num_heads, ff_dim) for _ in range(layers)]
+    self.final = Tensor.scaled_uniform(embed_dim, syms)
 
-#@TinyJit
-@Tensor.test()
-def sample(model, sample_num):
-    samples = Tensor.ones((1, block_size), dtype=dtypes.int)
-    for i in range(sample_num):
-        probs = model(samples[:, -block_size:])[-1][-1].softmax(-1)
-        samples = samples.cat(probs.multinomial().unsqueeze(0), dim = 1)
-    print('MODEL SAMPLING:')
-    print(decode(samples.tolist()))
+  def forward(self, x):
+    bs = x.shape[0]
 
-###### [ 3/3 : MAIN FUNCTION ] ######
+    maxlen_eye = Tensor.eye(x.shape[1])
+    maxlen_eye = maxlen_eye.unsqueeze(0).expand([bs, *maxlen_eye.shape])
+
+    onehot_feat = x.int().one_hot(self.syms)
+
+    onehot = maxlen_eye.cat(onehot_feat, dim=2).flatten(end_dim=1)
+
+    x = onehot.dot(self.embed).reshape((bs, x.shape[1], -1))
+    x = x.sequential(self.tbs)
+    # x = x.reshape((-1, x.shape[-1])).dot(self.final).log_softmax()
+    x = x.reshape((-1, x.shape[-1])).dot(self.final)
+    return x.reshape((bs, -1, x.shape[-1]))
+  
+###
+
+def train(model, X_train, Y_train, optim, steps, BS=128, lossfn=lambda out,y: out.sparse_categorical_crossentropy(y),
+        transform=lambda x: x, target_transform=lambda x: x, noloss=False, allow_jit=True):
+
+  def train_step(x, y):
+    # network
+    out = model.forward(x) if hasattr(model, 'forward') else model(x)
+    loss = lossfn(out, y)
+    optim.zero_grad()
+    loss.backward()
+    if noloss: del loss
+    optim.step()
+    if noloss: return (None, None)
+    cat = out.argmax(axis=-1)
+    accuracy = (cat == y).mean()
+    return loss.realize(), accuracy.realize()
+
+  if allow_jit: train_step = TinyJit(train_step)
+
+  with Tensor.train():
+    losses, accuracies = [], []
+    for i in (t := trange(steps, disable=CI)):
+      samp = np.random.randint(0, X_train.shape[0], size=(BS))
+      x = Tensor(transform(X_train[samp]), requires_grad=False)
+      y = Tensor(target_transform(Y_train[samp]))
+      loss, accuracy = train_step(x, y)
+      # printing
+      if not noloss:
+        loss, accuracy = loss.numpy(), accuracy.numpy()
+        losses.append(loss)
+        accuracies.append(accuracy)
+        t.set_description("loss %.2f accuracy %.2f" % (loss, accuracy))
+  return [losses, accuracies]
+
+def evaluate(model, X_test, Y_test, num_classes=None, BS=128, return_predict=False, transform=lambda x: x,
+             target_transform=lambda y: y):
+  Tensor.training = False
+  def numpy_eval(Y_test, num_classes):
+    Y_test_preds_out = np.zeros(list(Y_test.shape)+[num_classes])
+    for i in trange((len(Y_test)-1)//BS+1, disable=CI):
+      x = Tensor(transform(X_test[i*BS:(i+1)*BS]))
+      out = model.forward(x) if hasattr(model, 'forward') else model(x)
+      Y_test_preds_out[i*BS:(i+1)*BS] = out.numpy()
+    Y_test_preds = np.argmax(Y_test_preds_out, axis=-1)
+    Y_test = target_transform(Y_test)
+    return (Y_test == Y_test_preds).mean(), Y_test_preds
+
+  if num_classes is None: num_classes = Y_test.max().astype(int)+1
+  acc, Y_test_pred = numpy_eval(Y_test, num_classes)
+  print("test set accuracy is %f" % acc)
+  return (acc, Y_test_pred) if return_predict else acc
+
+###
 
 with open('littleshakespeare/input.txt') as file:
     text = file.read()    # data loading
@@ -77,39 +139,27 @@ decode = lambda ilist: ''.join([itoc[i] for i in ilist])    # converts list of i
 n = int(0.9*len(text))    # first 90% of data is the training set, rest is test set
 train_data, val_data = encode(text[:n]), encode(text[n:])    # creates training set and test set
 
-batch_size = 64    # number of training examples per forward pass
-block_size = 256    # max context length for predictions
-max_iters = 5000
-learning_rate = 9e-3
-sample_num = 200
-vocab_size = len(vocab)
-model = GPTLanguageModel()
-params = nn.state.get_parameters(model)
-optim = nn.optim.Adam(params)
-print('TRAINING BEGINS (with', sum([t.numel() for t in params]), 'parameters)')
+batch_size = 8000    # number of training examples per forward pass
+block_size = 128    # max context length for predictions
+steps = 5000
 
-@TinyJit
-@Tensor.train()
-def train_step() -> Tensor:
-    Xb, yb = get_batch(train_data)
-    optim.zero_grad()
-    loss = model(Xb).sparse_categorical_crossentropy(yb).backward()
-    optim.step()
-    return loss
+def get_batch(data):
+    xi = [random.randint(0, len(data)-block_size-1) for i in range(batch_size)]
+    xs = [data[i:i+block_size] for i in xi]
+    ys = [data[i+1:i+1+block_size] for i in xi]
+    return np.array(xs), np.array(ys) # (batch_size, block_size)
+
+model = Transformer(syms = len(vocab), maxlen = block_size, layers = 4, embed_dim = 64, num_heads = 4, ff_dim = 4*64)
+X_train, Y_train = get_batch(train_data)
+optim = Adam(get_parameters(model), lr=0.003)
+train(model, X_train, Y_train, optim, steps, BS=64, allow_jit=True)
+acc, Y_test_preds = evaluate(model, X_train, Y_train, num_classes=len(vocab), return_predict=True)
 
 @TinyJit
 @Tensor.test()
-def eval() -> Tensor:
-    Xb, yb = get_batch(val_data)
-    return (model(Xb).argmax(axis=-1) == yb).mean()
-
-#sample(model, sample_num)
-acc, startTime = float('nan'), time.time()
-for k in (t:=trange(max_iters)):
-    GlobalCounters.reset()   # NOTE: this makes it nice for DEBUG=2 timing
-    loss = train_step()
-    if k % 10 == 9: acc = eval().item()*100
-    t.set_description(f"loss: {loss.item():6.2f} accuracy: {acc:5.2f}%")
-
-#sample(model, sample_num)
-print('TRAINING COMPLETE (in', time.time() - startTime, 'sec)')
+def sample(model, sample_num):
+    samples = [1]*block_size
+    for i in range(sample_num): samples.append(model.forward(Tensor([samples[-block_size:]]))[-1][-1].softmax(-1).multinomial().item())
+    print('MODEL SAMPLING:')
+    print(decode(samples[block_size:]))
+sample(model, 200)

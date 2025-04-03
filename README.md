@@ -12,3 +12,4 @@ mechanical offering: an endlessly rising repository
 
 Notes:
 - "Run and Debug" mode in VScode causes an error at the end of programs that use tinygrad, but normal VScode running or command line python running work normally
+- tinygrad optimizers use Tensor.assign(self, x) which can only assign floats to x for some reason, so all params need to be float (???)
