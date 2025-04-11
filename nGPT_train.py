@@ -1,4 +1,7 @@
-# NOTE: BASED ON: https://github.com/NVIDIA/ngpt/blob/main/train.py
+# NOTE - allows a user to train, sample, or converse with an nGPT. the following scripts served as a starting point:
+# https://github.com/NVIDIA/ngpt/blob/main/train.py, https://github.com/NVIDIA/ngpt/blob/main/configurator.py,
+# https://github.com/karpathy/nanoGPT/blob/master/data/openwebtext/prepare.py,
+# https://github.com/karpathy/build-nanogpt/blob/master/fineweb.py
 
 # Copyright(c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # MIT License
@@ -45,7 +48,6 @@ $ torchrun --nproc_per_node=8 --nnodes=2 --node_rank=1 --master_addr=123.456.123
 import os
 import time
 import math
-import pickle
 import sys
 from contextlib import nullcontext
 from typing import Callable, Optional, Tuple, List
@@ -58,21 +60,28 @@ from nGPT_model import GPTConfig, GPT
 from torch.nn import functional as F
 from datetime import timedelta
 
+import tiktoken
+from datasets import load_dataset # huggingface datasets
+from ast import literal_eval # used in configurator.py
+
+
 # -----------------------------------------------------------------------------
 # I/O
 
 eval_interval = 1000
 log_interval = 10
 eval_iters = 200
-eval_only = False # if True, script exits right after the first eval
+eval_only = True # NOTE: THIS PROGRAM STARTS COMMAND LINE CONVERSATION IF EVAL_ONLY == TRUE, ELSE TRAINS MODEL (FROM SCRATCH UNLESS OVERRIDDEN BY COMMAND LINE ARGS)
 always_save_checkpoint = True # if True, always save a checkpoint after each eval
-init_from = 'scratch' # 'scratch' or 'resume' or 'gpt2*'
+init_from = 'resume' if eval_only else 'scratch' # NOTE: since vocab_size was rounded up for efficiency, sampling from untrained model gives out-of-bounds error when decoding
 # wandb logging
 wandb_log = False # disabled by default
 wandb_project = 'owt'
 wandb_run_name = 'gpt2' # 'run' + str(time.time())
 # data
-dataset = 'openwebtext'
+dataset = 'text' # NOTE: this becomes load_dataset(path = dataset)
+data_files = 'littleshakespeare/input.txt' # NOTE: this becomes load_dataset(data_files = data_files), set to None to get all files
+test_size = 0.1 # NOTE: part of data to allocate to test set
 gradient_accumulation_steps = 64 # used to simulate larger batch sizes
 batch_size = 8 # if gradient_accumulation_steps > 1, this is the micro-batch size
 # model
@@ -120,7 +129,35 @@ print("Current Directory:", os.getcwd())
 # the input configurations will overwrite all configs given above!
 # -----------------------------------------------------------------------------
 config_keys = [k for k,v in globals().items() if not k.startswith('_') and isinstance(v, (int, float, bool, str))]
-exec(open('configurator.py').read()) # overrides from command line or config file
+# exec(open('configurator.py').read()) # overrides from command line or config file # NOTE: below is configurator.py
+for arg in sys.argv[1:]:
+    if '=' not in arg:
+        # assume it's the name of a config file
+        assert not arg.startswith('--')
+        config_file = arg
+        print(f"Overriding config with {config_file}:")
+        with open(config_file) as f:
+            print(f.read())
+        exec(open(config_file).read())
+    else:
+        # assume it's a --key=value argument
+        assert arg.startswith('--')
+        key, val = arg.split('=')
+        key = key[2:]
+        if key in globals():
+            try:
+                # attempt to eval it it (e.g. if bool, number, or etc)
+                attempt = literal_eval(val)
+            except (SyntaxError, ValueError):
+                # if that goes wrong, just use the string
+                attempt = val
+            # ensure the types match ok
+            assert type(attempt) == type(globals()[key])
+            # cross fingers
+            print(f"Overriding: {key} = {attempt}")
+            globals()[key] = attempt
+        else:
+            raise ValueError(f"Unknown config key: {key}")
 config = {k: globals()[k] for k in config_keys} # will be useful for logging
 # -----------------------------------------------------------------------------
 
@@ -157,7 +194,7 @@ tokens_per_iter = gradient_accumulation_steps * ddp_world_size * batch_size * bl
 print(f"tokens per iteration will be: {tokens_per_iter:,}")
 
 
-out_dir='./'
+out_dir='./littleshakespeare'
 if master_process:
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
@@ -176,22 +213,43 @@ device_type = 'cuda' if 'cuda' in device else 'cpu' # for later use in torch.aut
 ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
 ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=device_type, dtype=ptdtype)
 
-# poor man's data loader
+# broke man's data loader
 tdataloading_begin = time.time()
-if os.path.exists('./../../data'):
-    data_dir = os.path.join('./../../data', dataset)
-else:   
-    data_dir = os.path.join('data', dataset)
-train_data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
-val_data = np.memmap(os.path.join(data_dir, 'val.bin'), dtype=np.uint16, mode='r')
+# if os.path.exists('./../../data'):
+#     data_dir = os.path.join('./../../data', dataset)
+# else:   
+#     data_dir = os.path.join('data', dataset)
+# train_data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
+# val_data = np.memmap(os.path.join(data_dir, 'val.bin'), dtype=np.uint16, mode='r')
+nprocs = max(1, os.cpu_count()//2)
+data = load_dataset(path = dataset, data_files = data_files, num_proc = nprocs)
+enc = tiktoken.get_encoding("gpt2")
+
+# we now want to tokenize the dataset. first define the encoding function (gpt2 bpe)
+def process(example):
+    ids = [enc.encode_single_token('\n')] if data_files == 'littleshakespeare/input.txt' else [enc.encode_single_token('<|endoftext|>')] # NOTE: hardcoded exception for shakespeare
+    ids.extend(enc.encode_ordinary(example['text'])) # encode_ordinary ignores any special tokens
+    return {'ids': ids}
+
+# tokenize the dataset
+tokenized = data.map(process, remove_columns=['text'], desc="tokenizing the splits", num_proc=nprocs)
+
+token_arr = []
+for split in tokenized.values():
+    token_arr.append(np.concatenate(split['ids']))
+token_arr = np.concatenate(token_arr)
+
+n = int(test_size*token_arr.shape[0])
+train_data, val_data = token_arr[:n], token_arr[n:]
 
 def get_batch(split):
-    # We recreate np.memmap every batch to avoid a memory leak, as per
-    # https://stackoverflow.com/questions/45132940/numpy-memmap-memory-usage-want-to-iterate-once/61472122#61472122
-    if split == 'train':
-        data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
-    else:
-        data = np.memmap(os.path.join(data_dir, 'val.bin'), dtype=np.uint16, mode='r')
+    # # We recreate np.memmap every batch to avoid a memory leak, as per
+    # # https://stackoverflow.com/questions/45132940/numpy-memmap-memory-usage-want-to-iterate-once/61472122#61472122
+    # if split == 'train':
+    #     data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
+    # else:
+    #     data = np.memmap(os.path.join(data_dir, 'val.bin'), dtype=np.uint16, mode='r')
+    data = train_data if split == 'train' else val_data
     ix = torch.randint(len(data) - block_size, (batch_size,))
     x = torch.stack([torch.from_numpy((data[i:i+block_size]).astype(np.int64)) for i in ix])
     y = torch.stack([torch.from_numpy((data[i+1:i+1+block_size]).astype(np.int64)) for i in ix])
@@ -207,14 +265,14 @@ iter_num = 0
 
 
 # attempt to derive vocab_size from the dataset
-meta_path = os.path.join(data_dir, 'meta.pkl')
+# meta_path = os.path.join(data_dir, 'meta.pkl')
 meta_vocab_size = None
-if os.path.exists(meta_path):
-    with open(meta_path, 'rb') as f:
-        meta = pickle.load(f)
-    meta_vocab_size = meta['vocab_size']
-    print(f"found vocab_size = {meta_vocab_size} (inside {meta_path})")
-print("Data loading time: %f sec" % (time.time()-tdataloading_begin))
+# if os.path.exists(meta_path):
+#     with open(meta_path, 'rb') as f:
+#         meta = pickle.load(f)
+#     meta_vocab_size = meta['vocab_size']
+#     print(f"found vocab_size = {meta_vocab_size} (inside {meta_path})")
+# print("Data loading time: %f sec" % (time.time()-tdataloading_begin))
 
 
 # model init
@@ -412,6 +470,53 @@ def normalize_matrices():
 if (use_nGPT == 1):
     normalize_matrices()
 
+@torch.no_grad()
+def sample():
+    model.eval()
+    ids = torch.tensor([enc.eot_token])
+    ids = ids.pin_memory().to(device, non_blocking=True)
+
+    for k in range(eval_iters):
+        with ctx:
+            logits, loss = model(torch.atleast_2d(ids))
+            probs = torch.nn.functional.softmax(logits[-1][-1], dim = -1)
+
+            topk_probs, topk_indices = torch.topk(probs, 50, dim=-1)
+            ix = torch.multinomial(topk_probs, 1)
+            token = torch.gather(topk_indices, -1, ix)
+
+            ids = torch.cat((ids, token))
+
+    print('\nSAMPLING:')
+    print(enc.decode(ids.tolist()))
+
+@torch.no_grad()
+def conversation():
+    model.eval()
+    ids = torch.tensor([enc.eot_token])
+    ids = ids.pin_memory().to(device, non_blocking=True)
+    print("\nCONVERSATION BEGINS (type 'exit()' to quit)")
+
+    while(1):
+        ids_new = torch.tensor(enc.encode_ordinary("\n" + input(">>> ")))
+        ids_new = ids_new.pin_memory().to(device, non_blocking=True)
+        ids = torch.cat((ids, ids_new))[-model_args['block_size']:]
+
+        for k in range(eval_iters):
+            with ctx:
+                logits, loss = model(torch.atleast_2d(ids))
+                probs = torch.nn.functional.softmax(logits[-1][-1], dim = -1)
+
+                topk_probs, topk_indices = torch.topk(probs, 50, dim=-1)
+                ix = torch.multinomial(topk_probs, 1)
+                token = torch.gather(topk_indices, -1, ix)
+
+                ids = torch.cat((ids, token))
+
+        tokens = enc.decode(ids.tolist())
+        if tokens.count("exit()"): break
+        print(tokens)
+
 while True:
     #sys.stdout.flush()
     if (local_iter_num > max_iters_per_launch):
@@ -460,7 +565,8 @@ while True:
                 torch.save(checkpoint, os.path.join(out_dir, 'ckpt.pt'))
                 print("Checkpoint saving time: %f sec" % (time.time()-tcheckpointsaving_begin))
     
-    if iter_num == 0 and eval_only:
+    if eval_only:
+        conversation()
         break
 
     # forward backward update, with optional gradient accumulation to simulate larger batch size
@@ -516,6 +622,8 @@ while True:
             finished_file = open(finished_fname, "w")
             finished_file.write("1")
             finished_file.close()
+
+            sample()
 
     if (time.time() - tlaunch > time_limit_seconds):
         break
