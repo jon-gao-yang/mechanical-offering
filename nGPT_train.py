@@ -1,7 +1,7 @@
-# NOTE - allows a user to train, sample, or converse with an nGPT. the following scripts served as a starting point:
-# https://github.com/NVIDIA/ngpt/blob/main/train.py, https://github.com/NVIDIA/ngpt/blob/main/configurator.py,
-# https://github.com/karpathy/nanoGPT/blob/master/data/openwebtext/prepare.py,
-# https://github.com/karpathy/build-nanogpt/blob/master/fineweb.py
+# NOTE - allows a user to train and sample from an nGPT. the following Github repositories served as a starting point:
+# https://github.com/NVIDIA/ngpt,
+# https://github.com/karpathy/nanoGPT,
+# https://github.com/karpathy/build-nanogpt
 
 # Copyright(c) 2024 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # MIT License
@@ -71,7 +71,7 @@ from ast import literal_eval # used in configurator.py
 eval_interval = 1000
 log_interval = 10
 eval_iters = 200
-eval_only = True # NOTE: THIS PROGRAM STARTS COMMAND LINE CONVERSATION IF EVAL_ONLY == TRUE, ELSE TRAINS MODEL (FROM SCRATCH UNLESS OVERRIDDEN BY COMMAND LINE ARGS)
+eval_only = False # NOTE: THIS PROGRAM STARTS COMMAND LINE CONVERSATION IF EVAL_ONLY == TRUE, ELSE TRAINS MODEL (FROM SCRATCH UNLESS OVERRIDDEN BY COMMAND LINE ARGS)
 always_save_checkpoint = True # if True, always save a checkpoint after each eval
 init_from = 'resume' if eval_only else 'scratch' # NOTE: since vocab_size was rounded up for efficiency, sampling from untrained model gives out-of-bounds error when decoding
 # wandb logging
@@ -88,13 +88,13 @@ batch_size = 8 # if gradient_accumulation_steps > 1, this is the micro-batch siz
 dropout = 0.0 # for pretraining 0 is good, for finetuning try 0.1+
 bias = False # do we use bias inside LayerNorm and Linear layers?
 # adamw optimizer
-max_iters = 600000 # total number of training iterations
+max_iters = 30000 # total number of training iterations
 beta1 = 0.9
 beta2 = 0.95
 grad_clip = 1.0 # clip gradients at this value, or disable if == 0.0
 # learning rate decay settings
 decay_lr = True # whether to decay the learning rate
-lr_decay_iters = 600000 # should be ~= max_iters per Chinchilla
+lr_decay_iters = 30000 # should be ~= max_iters per Chinchilla
 # DDP settings
 backend = 'nccl' # 'nccl', 'gloo', etc.
 # system
@@ -194,7 +194,7 @@ tokens_per_iter = gradient_accumulation_steps * ddp_world_size * batch_size * bl
 print(f"tokens per iteration will be: {tokens_per_iter:,}")
 
 
-out_dir='./littleshakespeare'
+out_dir = './edu_fineweb10B/train' # out_dir='./littleshakespeare' # NOTE: CHANGED FOR FINEWEBTEXT DATASET
 if master_process:
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
@@ -215,50 +215,91 @@ ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=
 
 # broke man's data loader
 tdataloading_begin = time.time()
-# if os.path.exists('./../../data'):
-#     data_dir = os.path.join('./../../data', dataset)
-# else:   
-#     data_dir = os.path.join('data', dataset)
-# train_data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
-# val_data = np.memmap(os.path.join(data_dir, 'val.bin'), dtype=np.uint16, mode='r')
 nprocs = max(1, os.cpu_count()//2)
-data = load_dataset(path = dataset, data_files = data_files, num_proc = nprocs)
 enc = tiktoken.get_encoding("gpt2")
+# data = load_dataset(path = dataset, data_files = data_files, num_proc = nprocs)
 
-# we now want to tokenize the dataset. first define the encoding function (gpt2 bpe)
-def process(example):
-    ids = [enc.encode_single_token('\n')] if data_files == 'littleshakespeare/input.txt' else [enc.encode_single_token('<|endoftext|>')] # NOTE: hardcoded exception for shakespeare
-    ids.extend(enc.encode_ordinary(example['text'])) # encode_ordinary ignores any special tokens
-    return {'ids': ids}
+# # we now want to tokenize the dataset. first define the encoding function (gpt2 bpe)
+# def process(example):
+#     ids = [enc.encode_single_token('\n')] if data_files == 'littleshakespeare/input.txt' else [enc.encode_single_token('<|endoftext|>')] # NOTE: hardcoded exception for shakespeare
+#     ids.extend(enc.encode_ordinary(example['text'])) # encode_ordinary ignores any special tokens
+#     return {'ids': ids}
 
-# tokenize the dataset
-tokenized = data.map(process, remove_columns=['text'], desc="tokenizing the splits", num_proc=nprocs)
+# # tokenize the dataset
+# tokenized = data.map(process, remove_columns=['text'], desc="tokenizing the splits", num_proc=nprocs)
 
-token_arr = []
-for split in tokenized.values():
-    token_arr.append(np.concatenate(split['ids']))
-token_arr = np.concatenate(token_arr)
+# token_arr = []
+# for split in tokenized.values():
+#     token_arr.append(np.concatenate(split['ids']))
+# token_arr = np.concatenate(token_arr)
 
-n = int(test_size*token_arr.shape[0])
-train_data, val_data = token_arr[:n], token_arr[n:]
+# n = int(test_size*token_arr.shape[0])
+# train_data, val_data = token_arr[:n], token_arr[n:]
 
-def get_batch(split):
-    # # We recreate np.memmap every batch to avoid a memory leak, as per
-    # # https://stackoverflow.com/questions/45132940/numpy-memmap-memory-usage-want-to-iterate-once/61472122#61472122
-    # if split == 'train':
-    #     data = np.memmap(os.path.join(data_dir, 'train.bin'), dtype=np.uint16, mode='r')
-    # else:
-    #     data = np.memmap(os.path.join(data_dir, 'val.bin'), dtype=np.uint16, mode='r')
-    data = train_data if split == 'train' else val_data
-    ix = torch.randint(len(data) - block_size, (batch_size,))
-    x = torch.stack([torch.from_numpy((data[i:i+block_size]).astype(np.int64)) for i in ix])
-    y = torch.stack([torch.from_numpy((data[i+1:i+1+block_size]).astype(np.int64)) for i in ix])
-    if device_type == 'cuda':
-        # pin arrays x,y, which allows us to move them to GPU asynchronously (non_blocking=True)
-        x, y = x.pin_memory().to(device, non_blocking=True), y.pin_memory().to(device, non_blocking=True)
-    else:
-        x, y = x.to(device), y.to(device)
-    return x, y
+# def get_batch(split):
+#     data = train_data if split == 'train' else val_data
+#     ix = torch.randint(len(data) - block_size, (batch_size,))
+#     x = torch.stack([torch.from_numpy((data[i:i+block_size]).astype(np.int64)) for i in ix])
+#     y = torch.stack([torch.from_numpy((data[i+1:i+1+block_size]).astype(np.int64)) for i in ix])
+#     if device_type == 'cuda':
+#         # pin arrays x,y, which allows us to move them to GPU asynchronously (non_blocking=True)
+#         x, y = x.pin_memory().to(device, non_blocking=True), y.pin_memory().to(device, non_blocking=True)
+#     else:
+#         x, y = x.to(device), y.to(device)
+#     return x, y
+
+###################### TEMPORARY DATALOADER FOR FINEWEBTEXT (FROM KARPATHY/BUILD-NANOGPT/TRAIN_GPT2.PY) [START] ##############################
+
+def load_tokens(filename):
+    npt = np.load(filename)
+    npt = npt.astype(np.int32) # added after video
+    ptt = torch.tensor(npt, dtype=torch.long)
+    ptt = ptt.pin_memory().to(device, non_blocking=True)
+    return ptt
+
+class DataLoaderLite:
+    def __init__(self, B, T, split):
+        self.B = B
+        self.T = T
+        assert split in {'train', 'val'}
+
+        # get the shard filenames
+        data_root = "edu_fineweb10B"
+        shards = os.listdir(data_root)
+        shards = [s for s in shards if split in s]
+        shards = sorted(shards)
+        shards = [os.path.join(data_root, s) for s in shards]
+        self.shards = shards
+        assert len(shards) > 0, f"no shards found for split {split}"
+        if master_process:
+            print(f"found {len(shards)} shards for split {split}")
+        self.reset()
+
+    def reset(self):
+        # state, init at shard zero
+        self.current_shard = 0
+        self.tokens = load_tokens(self.shards[self.current_shard])
+        self.current_position = self.B * self.T
+
+    def next_batch(self):
+        B, T = self.B, self.T
+        buf = self.tokens[self.current_position : self.current_position+B*T+1]
+        x = (buf[:-1]).view(B, T) # inputs
+        y = (buf[1:]).view(B, T) # targets
+        # advance the position in the tensor
+        self.current_position += B * T
+        # if loading the next batch would be out of bounds, advance to next shard
+        if self.current_position + (B * T + 1) > len(self.tokens):
+            self.current_shard = (self.current_shard + 1) % len(self.shards)
+            self.tokens = load_tokens(self.shards[self.current_shard])
+            self.current_position = B * T
+        return x, y
+    
+train_loader = DataLoaderLite(B=batch_size, T=block_size, split="train")
+val_loader = DataLoaderLite(B=batch_size, T=block_size, split="val")
+torch.set_float32_matmul_precision('high')
+    
+###################### TEMPORARY DATALOADER FOR FINEWEBTEXT (FROM KARPATHY/BUILD-NANOGPT/TRAIN_GPT2.PY) [END] ##############################
 
 # init these up here, can override if init_from='resume' (i.e. from a checkpoint)
 iter_num = 0
@@ -338,10 +379,11 @@ if ddp:
 def estimate_loss():
     out = {}
     model.eval()
+    val_loader.reset() # NOTE: CHANGED FOR FINEWEBTEXT DATASET
     for split in ['train', 'val']:
         losses = torch.zeros(eval_iters)
         for k in range(eval_iters):
-            X, Y = get_batch(split)
+            X, Y = train_loader.next_batch() if split == 'train' else val_loader.next_batch() # X, Y = get_batch(split) # NOTE: CHANGED FOR FINEWEBTEXT DATASET
             with ctx:
                 logits, loss = model(X, Y)
             losses[k] = loss.item()
@@ -571,7 +613,7 @@ while True:
 
     # forward backward update, with optional gradient accumulation to simulate larger batch size
     # and using the GradScaler if data type is float16
-    X, Y = get_batch('train')
+    X, Y = train_loader.next_batch() # X, Y = get_batch('train') # NOTE: CHANGED FOR FINEWEBTEXT DATASET
     for micro_step in range(gradient_accumulation_steps):
         if ddp:
             # in DDP training we only need to sync gradients at the last micro step.
@@ -583,7 +625,7 @@ while True:
             logits, loss = model(X, Y)
             loss = loss / gradient_accumulation_steps # scale the loss to account for gradient accumulation
         # immediately async prefetch next batch while model is doing the forward pass on the GPU
-        X, Y = get_batch('train')
+        X, Y = train_loader.next_batch() # X, Y = get_batch('train') # NOTE: CHANGED FOR FINEWEBTEXT DATASET
         # backward pass, with gradient scaling if training in fp16
         #.scale(loss).backward()
         loss.backward()
