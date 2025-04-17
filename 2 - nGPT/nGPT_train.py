@@ -67,8 +67,8 @@ out_dir = os.path.join(os.path.dirname(__file__), dataset) # out_dir='./littlesh
 eval_only = False # NOTE: THIS PROGRAM STARTS COMMAND LINE CONVERSATION IF EVAL_ONLY == TRUE, ELSE TRAINS MODEL (FROM SCRATCH UNLESS OVERRIDDEN BY COMMAND LINE ARGS)
 init_from = 'resume' if eval_only else 'scratch' # NOTE: since vocab_size was rounded up for efficiency, sampling from untrained model gives out-of-bounds error when decoding
 
-eval_interval = 1000
-log_interval = 10
+eval_interval = 10000
+log_interval = 1000
 eval_iters = 200
 always_save_checkpoint = True # if True, always save a checkpoint after each eval
 
@@ -86,14 +86,14 @@ dropout = 0.0 # for pretraining 0 is good, for finetuning try 0.1+
 bias = False # do we use bias inside LayerNorm and Linear layers?
 
 # adamw optimizer
-max_iters = 60000 # total number of training iterations
+max_iters = 1000000 # total number of training iterations
 beta1 = 0.9
 beta2 = 0.95
 grad_clip = 1.0 # clip gradients at this value, or disable if == 0.0
 
 # learning rate decay settings
 decay_lr = True # whether to decay the learning rate
-lr_decay_iters = 60000 # should be ~= max_iters per Chinchilla
+lr_decay_iters = max_iters # should be ~= max_iters per Chinchilla
 
 # DDP settings
 backend = 'nccl' # 'nccl', 'gloo', etc.
@@ -114,7 +114,7 @@ if (1):
     n_layer = 4
     n_head = 4
     n_embd = 256
-    block_size = 256 # = context/sequence length
+    block_size = 512 # = context/sequence length
 
 if (use_nGPT == 0):
     min_lr = 0.0 
@@ -155,6 +155,10 @@ else:
     seed_offset = 0
     ddp_world_size = 1
 tokens_per_iter = gradient_accumulation_steps * ddp_world_size * batch_size * block_size
+
+# initial time and print statements
+tlaunch = time.time()
+print("Current Directory:", os.getcwd())
 print(f"tokens per iteration will be: {tokens_per_iter:,}")
 
 # rng seeds
@@ -172,8 +176,6 @@ ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torc
 ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=device_type, dtype=ptdtype)
 
 # --------------------- (overrides above I/O from command line or config file) ---------------------
-tlaunch = time.time()
-print("Current Directory:", os.getcwd())
 config_keys = [k for k,v in globals().items() if not k.startswith('_') and isinstance(v, (int, float, bool, str))]
 
 for arg in sys.argv[1:]:
@@ -533,6 +535,7 @@ while True:
         rng_state_bytes = rng_state_pytorch.numpy().tobytes()
         losses = estimate_loss()
         print(f"step {iter_num}: train loss {losses['train']:.6f}, val loss {losses['val']:.6f}")
+        print("lr=%f" % lr)
        
         if wandb_log:
             wandb.log({
@@ -599,9 +602,6 @@ while True:
     
     if (use_nGPT == 1):
         normalize_matrices()
-
-    if (iter_num % 100 == 0) and master_process:
-        print("lr=%f" % lr)
 
     if master_process:
         resstr = f"{iter_num:.6e} {lr:.4e} {losses['train']:.4e} {losses['val']:.4e} {0.0:.4e} {0.0:.4e} {0.0:.4e} {0.0:.4e} {0.0:.4e} {0.0:.4e} {0.0:.4e} {0:.4e} {0.0:.4e} "

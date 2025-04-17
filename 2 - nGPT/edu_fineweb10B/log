@@ -1,4 +1,4 @@
 ---
-Command: PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python nGPT_train.py --max_iters=1000 >> edu_fineweb10B/log
+COMMAND: PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python nGPT_train.py >> edu_fineweb10B/log
 
-Output:
+OUTPUT:
