@@ -1,0 +1,1548 @@
+---
+Command: PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python nGPT_train.py --max_iters=1000 >> shakespeare/log
+
+Output:
+tokens per iteration will be: 16,384
+Current Directory: /home/santiago/Desktop/mechanical-offering/2 - nGPT
+Overriding: max_iters = 1000
+found 1 shards for split train
+found 1 shards for split val
+Initializing a new model from scratch
+defaulting to vocab_size of GPT-2 to 50304 (50257 rounded up for efficiency)
+number of parameters: 13.93M
+Model initialization/loading time: 0.135166 sec
+num decayed parameter tensors: 26, with 13,926,400 parameters
+num non-decayed parameter tensors: 17, with 55,936 parameters
+using fused AdamW: True
+compiling the model... (takes a ~minute)
+learning_rate: 0.001500
+min_lr: 0.000000
+max_iters: 1000.000000
+lr_decay_iters: 60000.000000
+warmup_iters: 0.000000
+batch_size: 64.000000
+gradient_accumulation_steps: 1.000000
+block_size: 256.000000
+weight_decay: 0.000000
+Time spent: 1.5886993408203125 seconds
+starting_iter_num: 0
+step 0: train loss 10.824672, val loss 10.824672
+iter 0: loss 10.825733, time 30632.61ms
+lr=0.001500
+iter 10: loss 10.651711, time 49.92ms
+iter 20: loss 10.412047, time 49.94ms
+iter 30: loss 10.140336, time 49.84ms
+iter 40: loss 9.734352, time 49.84ms
+iter 50: loss 9.335112, time 49.87ms
+iter 60: loss 8.928968, time 49.81ms
+iter 70: loss 8.567740, time 50.59ms
+iter 80: loss 8.210256, time 50.61ms
+iter 90: loss 7.952390, time 49.17ms
+iter 100: loss 7.724874, time 49.21ms
+lr=0.001500
+iter 110: loss 7.478267, time 49.89ms
+iter 120: loss 7.279899, time 49.60ms
+iter 130: loss 7.226877, time 49.37ms
+iter 140: loss 7.130748, time 49.67ms
+iter 150: loss 6.935754, time 49.59ms
+iter 160: loss 6.813256, time 50.78ms
+iter 170: loss 6.616312, time 49.75ms
+iter 180: loss 6.548201, time 49.80ms
+iter 190: loss 6.484582, time 49.79ms
+iter 200: loss 6.368721, time 49.74ms
+lr=0.001500
+iter 210: loss 6.297009, time 49.78ms
+iter 220: loss 6.292223, time 49.81ms
+iter 230: loss 6.095892, time 49.63ms
+iter 240: loss 5.983965, time 49.60ms
+iter 250: loss 5.924128, time 49.84ms
+iter 260: loss 5.823204, time 50.88ms
+iter 270: loss 5.658080, time 50.45ms
+iter 280: loss 5.645768, time 49.57ms
+iter 290: loss 5.653324, time 49.75ms
+iter 300: loss 5.482081, time 49.76ms
+lr=0.001500
+iter 310: loss 5.351810, time 49.79ms
+iter 320: loss 5.463783, time 49.80ms
+iter 330: loss 5.483805, time 49.75ms
+iter 340: loss 5.348755, time 49.86ms
+iter 350: loss 5.255135, time 49.80ms
+iter 360: loss 5.153248, time 49.96ms
+iter 370: loss 5.087274, time 49.87ms
+iter 380: loss 5.069916, time 49.79ms
+iter 390: loss 4.957327, time 49.47ms
+iter 400: loss 5.002344, time 49.80ms
+lr=0.001500
+iter 410: loss 5.035236, time 53.48ms
+iter 420: loss 4.818111, time 49.89ms
+iter 430: loss 4.689591, time 49.85ms
+iter 440: loss 4.638192, time 49.87ms
+iter 450: loss 4.565354, time 51.11ms
+iter 460: loss 4.422709, time 50.26ms
+iter 470: loss 4.535159, time 49.45ms
+iter 480: loss 4.616027, time 49.79ms
+iter 490: loss 4.428763, time 49.90ms
+iter 500: loss 4.358444, time 49.87ms
+lr=0.001500
+iter 510: loss 4.446054, time 49.72ms
+iter 520: loss 4.502228, time 49.81ms
+iter 530: loss 4.377764, time 49.77ms
+iter 540: loss 4.351552, time 49.81ms
+iter 550: loss 4.288687, time 49.80ms
+iter 560: loss 4.218757, time 49.79ms
+iter 570: loss 4.239594, time 49.76ms
+iter 580: loss 4.169041, time 49.74ms
+iter 590: loss 4.259531, time 49.81ms
+iter 600: loss 4.280426, time 49.98ms
+lr=0.001500
+iter 610: loss 4.078071, time 49.61ms
+iter 620: loss 3.942938, time 49.85ms
+iter 630: loss 3.925957, time 49.85ms
+iter 640: loss 3.922262, time 50.39ms
+iter 650: loss 3.828192, time 50.04ms
+iter 660: loss 3.906386, time 49.48ms
+iter 670: loss 3.945361, time 49.78ms
+iter 680: loss 3.742271, time 49.84ms
+iter 690: loss 3.672106, time 49.79ms
+iter 700: loss 3.770545, time 49.64ms
+lr=0.001499
+iter 710: loss 3.822879, time 50.10ms
+iter 720: loss 3.788276, time 49.79ms
+iter 730: loss 3.804411, time 49.65ms
+iter 740: loss 3.791783, time 49.64ms
+iter 750: loss 3.680146, time 49.54ms
+iter 760: loss 3.751232, time 49.69ms
+iter 770: loss 3.620889, time 49.83ms
+iter 780: loss 3.740817, time 49.90ms
+iter 790: loss 3.765765, time 49.62ms
+iter 800: loss 3.613027, time 49.93ms
+lr=0.001499
+iter 810: loss 3.469213, time 49.77ms
+iter 820: loss 3.457214, time 49.91ms
+iter 830: loss 3.424101, time 50.33ms
+iter 840: loss 3.282778, time 50.30ms
+iter 850: loss 3.389185, time 49.39ms
+iter 860: loss 3.489058, time 49.84ms
+iter 870: loss 3.393755, time 49.85ms
+iter 880: loss 3.264452, time 49.77ms
+iter 890: loss 3.424086, time 49.80ms
+iter 900: loss 3.377523, time 49.85ms
+lr=0.001499
+iter 910: loss 3.312445, time 49.81ms
+iter 920: loss 3.313166, time 49.81ms
+iter 930: loss 3.292186, time 49.67ms
+iter 940: loss 3.250711, time 49.79ms
+iter 950: loss 3.244309, time 49.85ms
+iter 960: loss 3.198849, time 49.86ms
+iter 970: loss 3.344054, time 49.86ms
+iter 980: loss 3.312728, time 49.91ms
+iter 990: loss 3.192369, time 49.86ms
+step 1000: train loss 3.074765, val loss 3.076721
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.444070 sec
+iter 1000: loss 3.128531, time 8083.57ms
+lr=0.001499
+
+SAMPLING:
+<|endoftext|>
+She dost have seen my lord:
+Shall come, sir, and leave it is done,
+As thou no more, how vile night'st not:
+Shall be so, when I could come to will be,
+And give me lie; and do it but may be then,
+I shall win my cousin, and let's think, to leave to my cousin
+Even in that father so hot, for I,
+If you say he that's son, my soul
+And have a man's wits and let me let!
+
+TRANIO:
+I am here?
+
+PAULIET:
+The gentleman's as the world I was no a thing
+Your enemies'er she not to be satisfied:
+His house then?
+
+AUT
+That shall be sent and let-book to have,
+Of all to make the Tower.
+
+First Servant:
+Come, you to say.
+
+PET
+Time spent: 103.8357617855072 seconds
+
+---
+COMMAND:
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python nGPT_train.py --max_iters=10000 --init_from='resume' >> shakespeare/log
+
+OUTPUT:
+tokens per iteration will be: 16,384
+Current Directory: /home/santiago/Desktop/mechanical-offering/2 - nGPT
+Overriding: max_iters = 10000
+Overriding: init_from = resume
+found 1 shards for split train
+found 1 shards for split val
+Resuming training from /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+number of parameters: 13.93M
+Model initialization/loading time: 0.193293 sec
+num decayed parameter tensors: 26, with 13,926,400 parameters
+num non-decayed parameter tensors: 17, with 55,936 parameters
+using fused AdamW: True
+compiling the model... (takes a ~minute)
+learning_rate: 0.001500
+min_lr: 0.000000
+max_iters: 10000.000000
+lr_decay_iters: 60000.000000
+warmup_iters: 0.000000
+batch_size: 64.000000
+gradient_accumulation_steps: 1.000000
+block_size: 256.000000
+weight_decay: 0.000000
+Time spent: 1.6316335201263428 seconds
+starting_iter_num: 1000
+step 1000: train loss 3.076730, val loss 3.076730
+iter 1000: loss 3.140284, time 14716.82ms
+lr=0.001499
+iter 1010: loss 3.054221, time 49.57ms
+iter 1020: loss 3.152236, time 49.84ms
+iter 1030: loss 3.096817, time 49.57ms
+iter 1040: loss 2.976607, time 49.88ms
+iter 1050: loss 2.937795, time 49.90ms
+iter 1060: loss 2.916093, time 49.85ms
+iter 1070: loss 2.927474, time 50.96ms
+iter 1080: loss 2.734385, time 50.58ms
+iter 1090: loss 2.882962, time 49.44ms
+iter 1100: loss 2.898300, time 49.81ms
+lr=0.001499
+iter 1110: loss 2.835757, time 49.80ms
+iter 1120: loss 2.801202, time 49.65ms
+iter 1130: loss 2.898060, time 49.87ms
+iter 1140: loss 2.907765, time 49.73ms
+iter 1150: loss 2.880985, time 49.80ms
+iter 1160: loss 2.842238, time 49.81ms
+iter 1170: loss 2.865825, time 49.85ms
+iter 1180: loss 2.812884, time 49.84ms
+iter 1190: loss 2.833079, time 49.70ms
+iter 1200: loss 2.742567, time 49.93ms
+lr=0.001499
+iter 1210: loss 2.912308, time 49.81ms
+iter 1220: loss 2.886651, time 49.93ms
+iter 1230: loss 2.766082, time 49.81ms
+iter 1240: loss 2.612459, time 49.80ms
+iter 1250: loss 2.592528, time 49.76ms
+iter 1260: loss 2.555144, time 50.44ms
+iter 1270: loss 2.477906, time 50.71ms
+iter 1280: loss 2.580063, time 49.65ms
+iter 1290: loss 2.612357, time 50.22ms
+iter 1300: loss 2.616413, time 50.16ms
+lr=0.001498
+iter 1310: loss 2.443000, time 49.64ms
+iter 1320: loss 2.569570, time 49.95ms
+iter 1330: loss 2.539270, time 49.65ms
+iter 1340: loss 2.491049, time 49.89ms
+iter 1350: loss 2.512624, time 49.84ms
+iter 1360: loss 2.543857, time 49.85ms
+iter 1370: loss 2.442888, time 49.92ms
+iter 1380: loss 2.464638, time 49.86ms
+iter 1390: loss 2.429617, time 49.78ms
+iter 1400: loss 2.551018, time 49.79ms
+lr=0.001498
+iter 1410: loss 2.506219, time 49.77ms
+iter 1420: loss 2.411589, time 49.80ms
+iter 1430: loss 2.327493, time 49.81ms
+iter 1440: loss 2.292542, time 49.85ms
+iter 1450: loss 2.264887, time 50.35ms
+iter 1460: loss 2.201851, time 50.35ms
+iter 1470: loss 2.243533, time 49.46ms
+iter 1480: loss 2.336927, time 49.77ms
+iter 1490: loss 2.334533, time 49.84ms
+iter 1500: loss 2.191801, time 49.82ms
+lr=0.001498
+iter 1510: loss 2.264877, time 49.88ms
+iter 1520: loss 2.299810, time 49.84ms
+iter 1530: loss 2.239874, time 49.79ms
+iter 1540: loss 2.195000, time 50.09ms
+iter 1550: loss 2.251392, time 49.61ms
+iter 1560: loss 2.148798, time 49.75ms
+iter 1570: loss 2.163819, time 49.75ms
+iter 1580: loss 2.125572, time 50.46ms
+iter 1590: loss 2.254479, time 49.97ms
+iter 1600: loss 2.233324, time 49.81ms
+lr=0.001497
+iter 1610: loss 2.148836, time 49.80ms
+iter 1620: loss 2.055048, time 49.77ms
+iter 1630: loss 1.984774, time 49.80ms
+iter 1640: loss 2.030042, time 51.15ms
+iter 1650: loss 1.957534, time 50.47ms
+iter 1660: loss 2.028808, time 49.41ms
+iter 1670: loss 2.086746, time 49.84ms
+iter 1680: loss 2.079239, time 49.84ms
+iter 1690: loss 1.985166, time 49.85ms
+iter 1700: loss 2.026942, time 52.95ms
+lr=0.001497
+iter 1710: loss 2.013337, time 50.60ms
+iter 1720: loss 1.962420, time 49.89ms
+iter 1730: loss 2.008598, time 49.81ms
+iter 1740: loss 2.016034, time 49.84ms
+iter 1750: loss 1.936939, time 49.82ms
+iter 1760: loss 1.971145, time 49.81ms
+iter 1770: loss 1.882822, time 51.02ms
+iter 1780: loss 1.986050, time 49.79ms
+iter 1790: loss 1.916770, time 49.82ms
+iter 1800: loss 1.868205, time 49.59ms
+lr=0.001497
+iter 1810: loss 1.811994, time 49.62ms
+iter 1820: loss 1.744847, time 49.89ms
+iter 1830: loss 1.730489, time 51.89ms
+iter 1840: loss 1.647591, time 50.14ms
+iter 1850: loss 1.767945, time 48.90ms
+iter 1860: loss 1.798299, time 50.51ms
+iter 1870: loss 1.751853, time 49.63ms
+iter 1880: loss 1.741586, time 49.63ms
+iter 1890: loss 1.720330, time 50.23ms
+iter 1900: loss 1.706101, time 49.92ms
+lr=0.001496
+iter 1910: loss 1.666523, time 49.86ms
+iter 1920: loss 1.651191, time 49.87ms
+iter 1930: loss 1.691479, time 49.63ms
+iter 1940: loss 1.624863, time 49.86ms
+iter 1950: loss 1.627812, time 50.20ms
+iter 1960: loss 1.602041, time 49.60ms
+iter 1970: loss 1.783225, time 49.90ms
+iter 1980: loss 1.621023, time 49.61ms
+iter 1990: loss 1.568364, time 49.66ms
+step 2000: train loss 1.570131, val loss 1.569127
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.120581 sec
+iter 2000: loss 1.575250, time 7762.25ms
+lr=0.001496
+iter 2010: loss 1.492028, time 49.77ms
+iter 2020: loss 1.545999, time 49.81ms
+iter 2030: loss 1.402270, time 49.87ms
+iter 2040: loss 1.404178, time 49.62ms
+iter 2050: loss 1.420674, time 49.92ms
+iter 2060: loss 1.561388, time 49.95ms
+iter 2070: loss 1.423880, time 49.84ms
+iter 2080: loss 1.400786, time 49.83ms
+iter 2090: loss 1.398085, time 49.85ms
+iter 2100: loss 1.323097, time 49.82ms
+lr=0.001495
+iter 2110: loss 1.439526, time 50.34ms
+iter 2120: loss 1.299396, time 50.41ms
+iter 2130: loss 1.489052, time 49.40ms
+iter 2140: loss 1.447669, time 49.84ms
+iter 2150: loss 1.474000, time 49.95ms
+iter 2160: loss 1.440624, time 49.85ms
+iter 2170: loss 1.421630, time 49.81ms
+iter 2180: loss 1.364865, time 49.81ms
+iter 2190: loss 1.337088, time 49.75ms
+iter 2200: loss 1.321599, time 49.85ms
+lr=0.001495
+iter 2210: loss 1.390025, time 49.83ms
+iter 2220: loss 1.320515, time 49.84ms
+iter 2230: loss 1.368420, time 49.86ms
+iter 2240: loss 1.305151, time 49.83ms
+iter 2250: loss 1.439765, time 49.78ms
+iter 2260: loss 1.337204, time 49.84ms
+iter 2270: loss 1.258210, time 49.87ms
+iter 2280: loss 1.280540, time 49.83ms
+iter 2290: loss 1.179051, time 49.80ms
+iter 2300: loss 1.257368, time 50.31ms
+lr=0.001495
+iter 2310: loss 1.187221, time 50.41ms
+iter 2320: loss 1.276964, time 49.48ms
+iter 2330: loss 1.198787, time 49.86ms
+iter 2340: loss 1.321728, time 49.85ms
+iter 2350: loss 1.280015, time 49.87ms
+iter 2360: loss 1.185155, time 49.88ms
+iter 2370: loss 1.168279, time 49.82ms
+iter 2380: loss 1.196495, time 49.84ms
+iter 2390: loss 1.128036, time 49.79ms
+iter 2400: loss 1.227980, time 49.85ms
+lr=0.001494
+iter 2410: loss 1.155618, time 49.82ms
+iter 2420: loss 1.164087, time 49.78ms
+iter 2430: loss 1.122175, time 49.81ms
+iter 2440: loss 1.274987, time 49.86ms
+iter 2450: loss 1.163856, time 49.88ms
+iter 2460: loss 1.108889, time 49.83ms
+iter 2470: loss 1.023390, time 49.84ms
+iter 2480: loss 1.006386, time 49.83ms
+iter 2490: loss 1.092237, time 50.36ms
+iter 2500: loss 0.964483, time 50.49ms
+lr=0.001494
+iter 2510: loss 1.098701, time 49.65ms
+iter 2520: loss 1.061287, time 49.82ms
+iter 2530: loss 1.116416, time 49.81ms
+iter 2540: loss 1.072500, time 49.89ms
+iter 2550: loss 0.990685, time 49.83ms
+iter 2560: loss 1.022728, time 49.81ms
+iter 2570: loss 0.951238, time 49.80ms
+iter 2580: loss 0.961298, time 49.75ms
+iter 2590: loss 1.035021, time 49.83ms
+iter 2600: loss 0.972370, time 49.83ms
+lr=0.001493
+iter 2610: loss 0.979921, time 49.83ms
+iter 2620: loss 0.965385, time 49.77ms
+iter 2630: loss 1.051151, time 49.81ms
+iter 2640: loss 0.918023, time 49.80ms
+iter 2650: loss 0.965097, time 50.14ms
+iter 2660: loss 0.879488, time 49.83ms
+iter 2670: loss 0.822412, time 49.84ms
+iter 2680: loss 0.950180, time 50.46ms
+iter 2690: loss 0.858106, time 50.34ms
+iter 2700: loss 0.894357, time 49.47ms
+lr=0.001493
+iter 2710: loss 0.902274, time 49.89ms
+iter 2720: loss 0.938619, time 49.89ms
+iter 2730: loss 0.894745, time 49.90ms
+iter 2740: loss 0.813286, time 49.98ms
+iter 2750: loss 0.846457, time 49.93ms
+iter 2760: loss 0.791927, time 49.69ms
+iter 2770: loss 0.822853, time 49.84ms
+iter 2780: loss 0.879793, time 49.94ms
+iter 2790: loss 0.827157, time 49.94ms
+iter 2800: loss 0.817471, time 49.88ms
+lr=0.001492
+iter 2810: loss 0.812104, time 49.82ms
+iter 2820: loss 0.884001, time 49.93ms
+iter 2830: loss 0.759858, time 49.91ms
+iter 2840: loss 0.774754, time 49.89ms
+iter 2850: loss 0.756135, time 49.90ms
+iter 2860: loss 0.706130, time 49.86ms
+iter 2870: loss 0.791818, time 50.46ms
+iter 2880: loss 0.730672, time 50.49ms
+iter 2890: loss 0.741756, time 49.53ms
+iter 2900: loss 0.758836, time 49.92ms
+lr=0.001491
+iter 2910: loss 0.807819, time 49.90ms
+iter 2920: loss 0.768016, time 49.59ms
+iter 2930: loss 0.713960, time 49.84ms
+iter 2940: loss 0.717244, time 49.88ms
+iter 2950: loss 0.658819, time 49.69ms
+iter 2960: loss 0.692259, time 49.98ms
+iter 2970: loss 0.748215, time 49.92ms
+iter 2980: loss 0.704146, time 49.97ms
+iter 2990: loss 0.693720, time 49.92ms
+step 3000: train loss 0.687839, val loss 0.686427
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.460598 sec
+iter 3000: loss 0.800159, time 8108.34ms
+lr=0.001491
+iter 3010: loss 0.696805, time 49.63ms
+iter 3020: loss 0.564807, time 49.91ms
+iter 3030: loss 0.514978, time 49.85ms
+iter 3040: loss 0.537662, time 49.96ms
+iter 3050: loss 0.535279, time 49.92ms
+iter 3060: loss 0.597099, time 49.96ms
+iter 3070: loss 0.584294, time 49.86ms
+iter 3080: loss 0.566229, time 49.94ms
+iter 3090: loss 0.649728, time 49.91ms
+iter 3100: loss 0.647643, time 49.67ms
+lr=0.001490
+iter 3110: loss 0.610138, time 49.95ms
+iter 3120: loss 0.598395, time 49.80ms
+iter 3130: loss 0.594104, time 49.94ms
+iter 3140: loss 0.537431, time 49.89ms
+iter 3150: loss 0.644577, time 50.58ms
+iter 3160: loss 0.556033, time 50.19ms
+iter 3170: loss 0.615058, time 48.90ms
+iter 3180: loss 0.594956, time 49.54ms
+iter 3190: loss 0.656772, time 49.98ms
+iter 3200: loss 0.625053, time 49.93ms
+lr=0.001489
+iter 3210: loss 0.613538, time 49.96ms
+iter 3220: loss 0.568241, time 49.70ms
+iter 3230: loss 0.542148, time 49.81ms
+iter 3240: loss 0.561130, time 49.94ms
+iter 3250: loss 0.664182, time 49.97ms
+iter 3260: loss 0.543393, time 49.99ms
+iter 3270: loss 0.568256, time 49.89ms
+iter 3280: loss 0.619004, time 49.85ms
+iter 3290: loss 0.590250, time 49.94ms
+iter 3300: loss 0.538071, time 49.92ms
+lr=0.001489
+iter 3310: loss 0.557093, time 49.68ms
+iter 3320: loss 0.481256, time 49.96ms
+iter 3330: loss 0.509143, time 49.93ms
+iter 3340: loss 0.541936, time 50.76ms
+iter 3350: loss 0.510185, time 50.76ms
+iter 3360: loss 0.559870, time 49.23ms
+iter 3370: loss 0.513246, time 50.32ms
+iter 3380: loss 0.555573, time 49.75ms
+iter 3390: loss 0.550351, time 49.95ms
+iter 3400: loss 0.491059, time 49.96ms
+lr=0.001488
+iter 3410: loss 0.472479, time 49.90ms
+iter 3420: loss 0.466544, time 49.88ms
+iter 3430: loss 0.428932, time 49.92ms
+iter 3440: loss 0.546584, time 49.95ms
+iter 3450: loss 0.471247, time 49.95ms
+iter 3460: loss 0.466096, time 49.90ms
+iter 3470: loss 0.507984, time 49.92ms
+iter 3480: loss 0.501237, time 49.92ms
+iter 3490: loss 0.450455, time 49.93ms
+iter 3500: loss 0.497200, time 49.91ms
+lr=0.001487
+iter 3510: loss 0.431331, time 49.92ms
+iter 3520: loss 0.428311, time 49.92ms
+iter 3530: loss 0.512410, time 50.45ms
+iter 3540: loss 0.432442, time 50.48ms
+iter 3550: loss 0.466321, time 49.53ms
+iter 3560: loss 0.448443, time 49.90ms
+iter 3570: loss 0.458984, time 49.90ms
+iter 3580: loss 0.501216, time 49.95ms
+iter 3590: loss 0.421061, time 49.91ms
+iter 3600: loss 0.393107, time 49.94ms
+lr=0.001487
+iter 3610: loss 0.414134, time 49.92ms
+iter 3620: loss 0.387056, time 49.92ms
+iter 3630: loss 0.448307, time 49.88ms
+iter 3640: loss 0.444283, time 49.89ms
+iter 3650: loss 0.404651, time 49.91ms
+iter 3660: loss 0.423364, time 49.94ms
+iter 3670: loss 0.433568, time 49.69ms
+iter 3680: loss 0.362180, time 49.88ms
+iter 3690: loss 0.399417, time 49.89ms
+iter 3700: loss 0.369471, time 49.84ms
+lr=0.001486
+iter 3710: loss 0.349381, time 49.87ms
+iter 3720: loss 0.412396, time 50.49ms
+iter 3730: loss 0.346513, time 50.47ms
+iter 3740: loss 0.378443, time 49.88ms
+iter 3750: loss 0.388715, time 49.93ms
+iter 3760: loss 0.394935, time 49.93ms
+iter 3770: loss 0.402046, time 49.85ms
+iter 3780: loss 0.385187, time 49.90ms
+iter 3790: loss 0.312032, time 49.91ms
+iter 3800: loss 0.341581, time 49.93ms
+lr=0.001485
+iter 3810: loss 0.327847, time 49.87ms
+iter 3820: loss 0.394549, time 50.29ms
+iter 3830: loss 0.376714, time 49.86ms
+iter 3840: loss 0.332436, time 50.00ms
+iter 3850: loss 0.370938, time 49.89ms
+iter 3860: loss 0.402800, time 49.95ms
+iter 3870: loss 0.320934, time 49.91ms
+iter 3880: loss 0.324218, time 49.90ms
+iter 3890: loss 0.321686, time 50.46ms
+iter 3900: loss 0.297060, time 49.88ms
+lr=0.001484
+iter 3910: loss 0.339640, time 50.56ms
+iter 3920: loss 0.309143, time 50.46ms
+iter 3930: loss 0.324361, time 49.51ms
+iter 3940: loss 0.333575, time 49.93ms
+iter 3950: loss 0.370539, time 49.90ms
+iter 3960: loss 0.381134, time 49.83ms
+iter 3970: loss 0.331458, time 49.95ms
+iter 3980: loss 0.287136, time 49.99ms
+iter 3990: loss 0.274423, time 50.03ms
+step 4000: train loss 0.302448, val loss 0.301598
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.067847 sec
+iter 4000: loss 0.353423, time 7719.62ms
+lr=0.001484
+iter 4010: loss 0.261761, time 50.50ms
+iter 4020: loss 0.279408, time 49.52ms
+iter 4030: loss 0.231132, time 49.91ms
+iter 4040: loss 0.286510, time 49.85ms
+iter 4050: loss 0.275239, time 50.15ms
+iter 4060: loss 0.252996, time 49.91ms
+iter 4070: loss 0.259539, time 49.93ms
+iter 4080: loss 0.247236, time 49.88ms
+iter 4090: loss 0.270268, time 49.90ms
+iter 4100: loss 0.305773, time 49.67ms
+lr=0.001483
+iter 4110: loss 0.273097, time 49.87ms
+iter 4120: loss 0.265511, time 49.67ms
+iter 4130: loss 0.323242, time 49.95ms
+iter 4140: loss 0.323154, time 49.88ms
+iter 4150: loss 0.271338, time 49.93ms
+iter 4160: loss 0.273228, time 49.88ms
+iter 4170: loss 0.270340, time 49.99ms
+iter 4180: loss 0.227124, time 49.82ms
+iter 4190: loss 0.275182, time 50.46ms
+iter 4200: loss 0.264457, time 50.50ms
+lr=0.001482
+iter 4210: loss 0.252355, time 49.53ms
+iter 4220: loss 0.251109, time 49.89ms
+iter 4230: loss 0.304658, time 49.90ms
+iter 4240: loss 0.306951, time 49.97ms
+iter 4250: loss 0.250337, time 49.69ms
+iter 4260: loss 0.235251, time 49.95ms
+iter 4270: loss 0.242700, time 49.98ms
+iter 4280: loss 0.230157, time 50.33ms
+iter 4290: loss 0.277466, time 49.93ms
+iter 4300: loss 0.252544, time 49.92ms
+lr=0.001481
+iter 4310: loss 0.255909, time 49.93ms
+iter 4320: loss 0.269268, time 49.93ms
+iter 4330: loss 0.273910, time 49.93ms
+iter 4340: loss 0.254903, time 50.00ms
+iter 4350: loss 0.226325, time 49.97ms
+iter 4360: loss 0.222962, time 49.95ms
+iter 4370: loss 0.213082, time 49.91ms
+iter 4380: loss 0.239712, time 50.49ms
+iter 4390: loss 0.216417, time 51.18ms
+iter 4400: loss 0.242425, time 49.67ms
+lr=0.001480
+iter 4410: loss 0.235378, time 49.93ms
+iter 4420: loss 0.256893, time 49.94ms
+iter 4430: loss 0.281644, time 49.86ms
+iter 4440: loss 0.219761, time 49.84ms
+iter 4450: loss 0.224488, time 49.88ms
+iter 4460: loss 0.221461, time 50.09ms
+iter 4470: loss 0.240341, time 49.83ms
+iter 4480: loss 0.266116, time 49.90ms
+iter 4490: loss 0.271894, time 49.85ms
+iter 4500: loss 0.260188, time 49.90ms
+lr=0.001479
+iter 4510: loss 0.252055, time 49.84ms
+iter 4520: loss 0.266729, time 50.13ms
+iter 4530: loss 0.240220, time 49.84ms
+iter 4540: loss 0.214331, time 49.88ms
+iter 4550: loss 0.230454, time 49.82ms
+iter 4560: loss 0.216121, time 49.85ms
+iter 4570: loss 0.222843, time 50.63ms
+iter 4580: loss 0.215803, time 51.42ms
+iter 4590: loss 0.210687, time 49.47ms
+iter 4600: loss 0.212290, time 49.95ms
+lr=0.001478
+iter 4610: loss 0.256505, time 49.90ms
+iter 4620: loss 0.228137, time 49.90ms
+iter 4630: loss 0.198542, time 49.89ms
+iter 4640: loss 0.200983, time 49.92ms
+iter 4650: loss 0.199039, time 49.89ms
+iter 4660: loss 0.194485, time 49.90ms
+iter 4670: loss 0.234018, time 49.98ms
+iter 4680: loss 0.214870, time 49.93ms
+iter 4690: loss 0.214349, time 49.93ms
+iter 4700: loss 0.226642, time 49.92ms
+lr=0.001477
+iter 4710: loss 0.230168, time 49.92ms
+iter 4720: loss 0.201835, time 49.89ms
+iter 4730: loss 0.217524, time 49.93ms
+iter 4740: loss 0.189534, time 49.90ms
+iter 4750: loss 0.177121, time 49.92ms
+iter 4760: loss 0.232975, time 50.51ms
+iter 4770: loss 0.214637, time 50.45ms
+iter 4780: loss 0.194081, time 49.55ms
+iter 4790: loss 0.214100, time 49.93ms
+iter 4800: loss 0.238213, time 49.92ms
+lr=0.001476
+iter 4810: loss 0.213219, time 49.88ms
+iter 4820: loss 0.203198, time 49.93ms
+iter 4830: loss 0.182633, time 49.89ms
+iter 4840: loss 0.180339, time 49.90ms
+iter 4850: loss 0.190743, time 49.92ms
+iter 4860: loss 0.212257, time 49.89ms
+iter 4870: loss 0.180298, time 49.94ms
+iter 4880: loss 0.199957, time 49.97ms
+iter 4890: loss 0.206899, time 49.93ms
+iter 4900: loss 0.209826, time 49.96ms
+lr=0.001475
+iter 4910: loss 0.195915, time 49.94ms
+iter 4920: loss 0.186693, time 49.94ms
+iter 4930: loss 0.161960, time 49.97ms
+iter 4940: loss 0.166161, time 49.96ms
+iter 4950: loss 0.170622, time 50.57ms
+iter 4960: loss 0.166530, time 51.25ms
+iter 4970: loss 0.176041, time 48.83ms
+iter 4980: loss 0.188096, time 49.62ms
+iter 4990: loss 0.189139, time 49.69ms
+step 5000: train loss 0.167298, val loss 0.167384
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 1.971455 sec
+iter 5000: loss 0.183789, time 7623.38ms
+lr=0.001474
+iter 5010: loss 0.178286, time 49.92ms
+iter 5020: loss 0.136453, time 49.98ms
+iter 5030: loss 0.119712, time 49.96ms
+iter 5040: loss 0.147521, time 50.53ms
+iter 5050: loss 0.128863, time 50.96ms
+iter 5060: loss 0.138746, time 48.75ms
+iter 5070: loss 0.157968, time 50.23ms
+iter 5080: loss 0.166384, time 49.92ms
+iter 5090: loss 0.189842, time 49.89ms
+iter 5100: loss 0.172272, time 49.90ms
+lr=0.001473
+iter 5110: loss 0.157387, time 49.94ms
+iter 5120: loss 0.155342, time 49.92ms
+iter 5130: loss 0.157535, time 49.87ms
+iter 5140: loss 0.197742, time 49.90ms
+iter 5150: loss 0.177044, time 49.94ms
+iter 5160: loss 0.153349, time 49.93ms
+iter 5170: loss 0.183396, time 49.89ms
+iter 5180: loss 0.185343, time 49.90ms
+iter 5190: loss 0.155938, time 49.91ms
+iter 5200: loss 0.172880, time 49.95ms
+lr=0.001472
+iter 5210: loss 0.145285, time 49.97ms
+iter 5220: loss 0.142309, time 49.91ms
+iter 5230: loss 0.171435, time 50.45ms
+iter 5240: loss 0.143750, time 50.47ms
+iter 5250: loss 0.153213, time 49.53ms
+iter 5260: loss 0.140837, time 49.89ms
+iter 5270: loss 0.166743, time 49.95ms
+iter 5280: loss 0.172872, time 49.94ms
+iter 5290: loss 0.148581, time 49.91ms
+iter 5300: loss 0.159594, time 49.90ms
+lr=0.001471
+iter 5310: loss 0.145423, time 49.89ms
+iter 5320: loss 0.175546, time 49.90ms
+iter 5330: loss 0.189433, time 49.91ms
+iter 5340: loss 0.154118, time 49.92ms
+iter 5350: loss 0.166105, time 49.93ms
+iter 5360: loss 0.176735, time 49.92ms
+iter 5370: loss 0.165826, time 49.90ms
+iter 5380: loss 0.171034, time 49.90ms
+iter 5390: loss 0.158757, time 49.86ms
+iter 5400: loss 0.136108, time 49.89ms
+lr=0.001470
+iter 5410: loss 0.165121, time 49.94ms
+iter 5420: loss 0.158394, time 50.16ms
+iter 5430: loss 0.154199, time 50.42ms
+iter 5440: loss 0.155108, time 49.48ms
+iter 5450: loss 0.139534, time 49.93ms
+iter 5460: loss 0.188970, time 49.88ms
+iter 5470: loss 0.168953, time 49.88ms
+iter 5480: loss 0.133341, time 49.93ms
+iter 5490: loss 0.150043, time 49.91ms
+iter 5500: loss 0.147544, time 49.88ms
+lr=0.001469
+iter 5510: loss 0.147255, time 49.91ms
+iter 5520: loss 0.181407, time 49.92ms
+iter 5530: loss 0.142860, time 49.94ms
+iter 5540: loss 0.158651, time 49.90ms
+iter 5550: loss 0.157626, time 49.94ms
+iter 5560: loss 0.171661, time 49.49ms
+iter 5570: loss 0.141857, time 50.14ms
+iter 5580: loss 0.137145, time 49.89ms
+iter 5590: loss 0.133916, time 49.85ms
+iter 5600: loss 0.123648, time 49.88ms
+lr=0.001468
+iter 5610: loss 0.144615, time 51.61ms
+iter 5620: loss 0.138624, time 50.36ms
+iter 5630: loss 0.150929, time 49.51ms
+iter 5640: loss 0.142543, time 49.62ms
+iter 5650: loss 0.146157, time 49.88ms
+iter 5660: loss 0.166781, time 49.95ms
+iter 5670: loss 0.137052, time 49.87ms
+iter 5680: loss 0.139334, time 49.94ms
+iter 5690: loss 0.144794, time 49.89ms
+iter 5700: loss 0.130440, time 49.94ms
+lr=0.001467
+iter 5710: loss 0.138765, time 49.90ms
+iter 5720: loss 0.135019, time 49.91ms
+iter 5730: loss 0.130311, time 49.95ms
+iter 5740: loss 0.138643, time 49.97ms
+iter 5750: loss 0.152753, time 49.96ms
+iter 5760: loss 0.131486, time 49.72ms
+iter 5770: loss 0.131984, time 49.96ms
+iter 5780: loss 0.122733, time 49.93ms
+iter 5790: loss 0.125209, time 49.97ms
+iter 5800: loss 0.153402, time 51.04ms
+lr=0.001466
+iter 5810: loss 0.118497, time 50.33ms
+iter 5820: loss 0.122113, time 49.04ms
+iter 5830: loss 0.126615, time 49.62ms
+iter 5840: loss 0.138316, time 49.97ms
+iter 5850: loss 0.141425, time 49.90ms
+iter 5860: loss 0.116028, time 49.92ms
+iter 5870: loss 0.117602, time 49.87ms
+iter 5880: loss 0.113512, time 49.94ms
+iter 5890: loss 0.120649, time 49.95ms
+iter 5900: loss 0.124863, time 49.94ms
+lr=0.001464
+iter 5910: loss 0.123480, time 49.96ms
+iter 5920: loss 0.123856, time 50.05ms
+iter 5930: loss 0.136052, time 50.02ms
+iter 5940: loss 0.142094, time 49.96ms
+iter 5950: loss 0.118886, time 49.98ms
+iter 5960: loss 0.127111, time 49.98ms
+iter 5970: loss 0.113193, time 49.94ms
+iter 5980: loss 0.110316, time 49.90ms
+iter 5990: loss 0.124286, time 50.92ms
+step 6000: train loss 0.099321, val loss 0.099408
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.003585 sec
+iter 6000: loss 0.130232, time 7657.39ms
+lr=0.001463
+iter 6010: loss 0.105324, time 49.93ms
+iter 6020: loss 0.098214, time 49.96ms
+iter 6030: loss 0.093739, time 50.02ms
+iter 6040: loss 0.085582, time 49.70ms
+iter 6050: loss 0.089627, time 49.94ms
+iter 6060: loss 0.087076, time 49.98ms
+iter 6070: loss 0.102656, time 49.89ms
+iter 6080: loss 0.109175, time 50.56ms
+iter 6090: loss 0.110694, time 50.57ms
+iter 6100: loss 0.123770, time 49.55ms
+lr=0.001462
+iter 6110: loss 0.120850, time 49.92ms
+iter 6120: loss 0.135127, time 49.92ms
+iter 6130: loss 0.140554, time 49.91ms
+iter 6140: loss 0.101514, time 49.90ms
+iter 6150: loss 0.100745, time 49.89ms
+iter 6160: loss 0.117382, time 49.92ms
+iter 6170: loss 0.100163, time 49.91ms
+iter 6180: loss 0.108724, time 49.89ms
+iter 6190: loss 0.129036, time 49.88ms
+iter 6200: loss 0.109359, time 49.93ms
+lr=0.001461
+iter 6210: loss 0.113759, time 49.91ms
+iter 6220: loss 0.140080, time 49.92ms
+iter 6230: loss 0.102142, time 49.91ms
+iter 6240: loss 0.116728, time 49.96ms
+iter 6250: loss 0.112784, time 49.97ms
+iter 6260: loss 0.098162, time 49.91ms
+iter 6270: loss 0.119679, time 51.06ms
+iter 6280: loss 0.111843, time 50.53ms
+iter 6290: loss 0.108988, time 49.59ms
+iter 6300: loss 0.109771, time 49.94ms
+lr=0.001460
+iter 6310: loss 0.126392, time 49.94ms
+iter 6320: loss 0.131598, time 49.91ms
+iter 6330: loss 0.107181, time 49.97ms
+iter 6340: loss 0.109914, time 49.90ms
+iter 6350: loss 0.110627, time 49.91ms
+iter 6360: loss 0.116787, time 49.90ms
+iter 6370: loss 0.120329, time 49.95ms
+iter 6380: loss 0.108243, time 49.92ms
+iter 6390: loss 0.119452, time 49.88ms
+iter 6400: loss 0.112076, time 49.89ms
+lr=0.001458
+iter 6410: loss 0.119686, time 49.95ms
+iter 6420: loss 0.114580, time 49.88ms
+iter 6430: loss 0.103002, time 49.96ms
+iter 6440: loss 0.103486, time 49.92ms
+iter 6450: loss 0.112657, time 49.93ms
+iter 6460: loss 0.114710, time 50.48ms
+iter 6470: loss 0.107839, time 50.50ms
+iter 6480: loss 0.102423, time 49.53ms
+iter 6490: loss 0.107733, time 49.95ms
+iter 6500: loss 0.127542, time 49.95ms
+lr=0.001457
+iter 6510: loss 0.121772, time 49.86ms
+iter 6520: loss 0.111266, time 49.93ms
+iter 6530: loss 0.105144, time 49.87ms
+iter 6540: loss 0.110451, time 49.92ms
+iter 6550: loss 0.110451, time 49.95ms
+iter 6560: loss 0.125721, time 49.92ms
+iter 6570: loss 0.116403, time 49.87ms
+iter 6580: loss 0.097369, time 49.95ms
+iter 6590: loss 0.100832, time 49.91ms
+iter 6600: loss 0.122402, time 49.92ms
+lr=0.001456
+iter 6610: loss 0.102086, time 49.91ms
+iter 6620: loss 0.098929, time 49.95ms
+iter 6630: loss 0.107542, time 49.93ms
+iter 6640: loss 0.099217, time 49.90ms
+iter 6650: loss 0.115357, time 50.47ms
+iter 6660: loss 0.096860, time 50.88ms
+iter 6670: loss 0.092116, time 49.58ms
+iter 6680: loss 0.103728, time 49.55ms
+iter 6690: loss 0.114901, time 49.89ms
+iter 6700: loss 0.103460, time 49.92ms
+lr=0.001454
+iter 6710: loss 0.105500, time 49.92ms
+iter 6720: loss 0.096925, time 49.94ms
+iter 6730: loss 0.086298, time 49.96ms
+iter 6740: loss 0.088952, time 49.84ms
+iter 6750: loss 0.111804, time 49.96ms
+iter 6760: loss 0.096043, time 49.99ms
+iter 6770: loss 0.099591, time 49.98ms
+iter 6780: loss 0.101583, time 49.94ms
+iter 6790: loss 0.101373, time 49.93ms
+iter 6800: loss 0.095560, time 49.99ms
+lr=0.001453
+iter 6810: loss 0.085824, time 49.94ms
+iter 6820: loss 0.090987, time 49.95ms
+iter 6830: loss 0.104096, time 49.70ms
+iter 6840: loss 0.101903, time 50.50ms
+iter 6850: loss 0.096629, time 50.87ms
+iter 6860: loss 0.107047, time 49.58ms
+iter 6870: loss 0.100367, time 49.95ms
+iter 6880: loss 0.091247, time 49.96ms
+iter 6890: loss 0.109748, time 49.92ms
+iter 6900: loss 0.088048, time 49.88ms
+lr=0.001452
+iter 6910: loss 0.077489, time 49.90ms
+iter 6920: loss 0.084732, time 49.89ms
+iter 6930: loss 0.085643, time 49.86ms
+iter 6940: loss 0.104172, time 49.91ms
+iter 6950: loss 0.099042, time 49.92ms
+iter 6960: loss 0.084646, time 49.92ms
+iter 6970: loss 0.095375, time 49.93ms
+iter 6980: loss 0.104979, time 49.91ms
+iter 6990: loss 0.080167, time 49.91ms
+step 7000: train loss 0.069986, val loss 0.069676
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 1.932603 sec
+iter 7000: loss 0.085929, time 7590.28ms
+lr=0.001450
+iter 7010: loss 0.081264, time 49.83ms
+iter 7020: loss 0.082813, time 49.91ms
+iter 7030: loss 0.073250, time 49.71ms
+iter 7040: loss 0.073033, time 49.86ms
+iter 7050: loss 0.084189, time 49.81ms
+iter 7060: loss 0.084612, time 49.68ms
+iter 7070: loss 0.083061, time 49.89ms
+iter 7080: loss 0.085159, time 49.67ms
+iter 7090: loss 0.088442, time 49.92ms
+iter 7100: loss 0.081740, time 49.92ms
+lr=0.001449
+iter 7110: loss 0.091787, time 49.94ms
+iter 7120: loss 0.094410, time 50.57ms
+iter 7130: loss 0.092155, time 50.50ms
+iter 7140: loss 0.085257, time 49.44ms
+iter 7150: loss 0.087464, time 49.92ms
+iter 7160: loss 0.102322, time 49.89ms
+iter 7170: loss 0.089009, time 49.89ms
+iter 7180: loss 0.085861, time 49.95ms
+iter 7190: loss 0.097015, time 49.90ms
+iter 7200: loss 0.093979, time 49.89ms
+lr=0.001447
+iter 7210: loss 0.091759, time 49.92ms
+iter 7220: loss 0.098228, time 49.88ms
+iter 7230: loss 0.091399, time 49.93ms
+iter 7240: loss 0.092155, time 49.84ms
+iter 7250: loss 0.088768, time 49.90ms
+iter 7260: loss 0.096338, time 49.73ms
+iter 7270: loss 0.096197, time 49.95ms
+iter 7280: loss 0.098276, time 49.92ms
+iter 7290: loss 0.094054, time 49.90ms
+iter 7300: loss 0.087253, time 49.91ms
+lr=0.001446
+iter 7310: loss 0.089183, time 50.76ms
+iter 7320: loss 0.085474, time 50.50ms
+iter 7330: loss 0.094611, time 49.57ms
+iter 7340: loss 0.092328, time 49.89ms
+iter 7350: loss 0.090759, time 49.90ms
+iter 7360: loss 0.085339, time 49.96ms
+iter 7370: loss 0.089372, time 49.92ms
+iter 7380: loss 0.088936, time 49.93ms
+iter 7390: loss 0.079571, time 49.93ms
+iter 7400: loss 0.085407, time 49.95ms
+lr=0.001444
+iter 7410: loss 0.087430, time 49.94ms
+iter 7420: loss 0.091869, time 49.92ms
+iter 7430: loss 0.088697, time 49.91ms
+iter 7440: loss 0.085520, time 49.86ms
+iter 7450: loss 0.090982, time 49.82ms
+iter 7460: loss 0.086321, time 49.97ms
+iter 7470: loss 0.084470, time 49.98ms
+iter 7480: loss 0.079283, time 49.91ms
+iter 7490: loss 0.092178, time 49.91ms
+iter 7500: loss 0.084182, time 50.51ms
+lr=0.001443
+iter 7510: loss 0.085122, time 50.51ms
+iter 7520: loss 0.098632, time 49.71ms
+iter 7530: loss 0.094411, time 49.85ms
+iter 7540: loss 0.090065, time 49.90ms
+iter 7550: loss 0.088398, time 49.85ms
+iter 7560: loss 0.095806, time 49.89ms
+iter 7570: loss 0.079252, time 49.94ms
+iter 7580: loss 0.090599, time 49.92ms
+iter 7590: loss 0.091023, time 49.93ms
+iter 7600: loss 0.089442, time 49.95ms
+lr=0.001441
+iter 7610: loss 0.085695, time 49.90ms
+iter 7620: loss 0.093317, time 49.93ms
+iter 7630: loss 0.084586, time 49.93ms
+iter 7640: loss 0.094542, time 49.94ms
+iter 7650: loss 0.087510, time 49.85ms
+iter 7660: loss 0.090891, time 49.95ms
+iter 7670: loss 0.086500, time 49.95ms
+iter 7680: loss 0.084334, time 49.95ms
+iter 7690: loss 0.092388, time 50.51ms
+iter 7700: loss 0.091780, time 50.62ms
+lr=0.001440
+iter 7710: loss 0.088233, time 49.56ms
+iter 7720: loss 0.084552, time 49.88ms
+iter 7730: loss 0.106374, time 49.95ms
+iter 7740: loss 0.100176, time 49.88ms
+iter 7750: loss 0.085193, time 49.99ms
+iter 7760: loss 0.095381, time 49.90ms
+iter 7770: loss 0.099912, time 49.93ms
+iter 7780: loss 0.090586, time 49.93ms
+iter 7790: loss 0.097853, time 49.97ms
+iter 7800: loss 0.091607, time 49.86ms
+lr=0.001438
+iter 7810: loss 0.101663, time 49.90ms
+iter 7820: loss 0.100611, time 49.97ms
+iter 7830: loss 0.097779, time 49.92ms
+iter 7840: loss 0.097790, time 49.87ms
+iter 7850: loss 0.088819, time 49.89ms
+iter 7860: loss 0.092906, time 49.91ms
+iter 7870: loss 0.087302, time 49.94ms
+iter 7880: loss 0.096832, time 50.62ms
+iter 7890: loss 0.085540, time 50.50ms
+iter 7900: loss 0.094929, time 49.57ms
+lr=0.001437
+iter 7910: loss 0.091475, time 49.94ms
+iter 7920: loss 0.100571, time 49.90ms
+iter 7930: loss 0.099092, time 49.92ms
+iter 7940: loss 0.098761, time 49.93ms
+iter 7950: loss 0.097283, time 49.95ms
+iter 7960: loss 0.096568, time 49.90ms
+iter 7970: loss 0.104489, time 49.90ms
+iter 7980: loss 0.100854, time 49.91ms
+iter 7990: loss 0.088940, time 49.92ms
+step 8000: train loss 0.078760, val loss 0.078036
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.246045 sec
+iter 8000: loss 0.105218, time 7914.65ms
+lr=0.001435
+iter 8010: loss 0.084963, time 49.88ms
+iter 8020: loss 0.076397, time 49.86ms
+iter 8030: loss 0.063350, time 49.91ms
+iter 8040: loss 0.060082, time 49.92ms
+iter 8050: loss 0.058523, time 49.86ms
+iter 8060: loss 0.062260, time 49.89ms
+iter 8070: loss 0.060011, time 49.91ms
+iter 8080: loss 0.062736, time 49.92ms
+iter 8090: loss 0.075401, time 49.91ms
+iter 8100: loss 0.088503, time 49.90ms
+lr=0.001434
+iter 8110: loss 0.081826, time 49.93ms
+iter 8120: loss 0.085819, time 49.88ms
+iter 8130: loss 0.094424, time 49.95ms
+iter 8140: loss 0.073427, time 49.90ms
+iter 8150: loss 0.075424, time 49.92ms
+iter 8160: loss 0.077599, time 50.42ms
+iter 8170: loss 0.064934, time 50.50ms
+iter 8180: loss 0.070031, time 49.56ms
+iter 8190: loss 0.064886, time 49.92ms
+iter 8200: loss 0.074198, time 49.89ms
+lr=0.001432
+iter 8210: loss 0.064359, time 49.93ms
+iter 8220: loss 0.057216, time 49.95ms
+iter 8230: loss 0.063761, time 49.93ms
+iter 8240: loss 0.077075, time 49.92ms
+iter 8250: loss 0.070535, time 49.88ms
+iter 8260: loss 0.074536, time 49.94ms
+iter 8270: loss 0.082550, time 49.94ms
+iter 8280: loss 0.083062, time 49.92ms
+iter 8290: loss 0.077981, time 49.90ms
+iter 8300: loss 0.088585, time 49.92ms
+lr=0.001430
+iter 8310: loss 0.084640, time 49.93ms
+iter 8320: loss 0.071885, time 49.95ms
+iter 8330: loss 0.069406, time 49.88ms
+iter 8340: loss 0.064522, time 49.94ms
+iter 8350: loss 0.075341, time 50.47ms
+iter 8360: loss 0.079697, time 50.50ms
+iter 8370: loss 0.067439, time 49.30ms
+iter 8380: loss 0.075335, time 49.93ms
+iter 8390: loss 0.078051, time 49.85ms
+iter 8400: loss 0.078394, time 50.23ms
+lr=0.001429
+iter 8410: loss 0.077861, time 49.91ms
+iter 8420: loss 0.067849, time 49.88ms
+iter 8430: loss 0.071160, time 49.90ms
+iter 8440: loss 0.082258, time 49.90ms
+iter 8450: loss 0.069931, time 49.88ms
+iter 8460: loss 0.075796, time 49.89ms
+iter 8470: loss 0.078108, time 49.90ms
+iter 8480: loss 0.096117, time 49.91ms
+iter 8490: loss 0.069994, time 49.87ms
+iter 8500: loss 0.069299, time 49.92ms
+lr=0.001427
+iter 8510: loss 0.073018, time 49.92ms
+iter 8520: loss 0.072743, time 49.93ms
+iter 8530: loss 0.072757, time 49.91ms
+iter 8540: loss 0.076245, time 50.41ms
+iter 8550: loss 0.065862, time 50.60ms
+iter 8560: loss 0.074135, time 49.47ms
+iter 8570: loss 0.066102, time 49.90ms
+iter 8580: loss 0.066520, time 49.91ms
+iter 8590: loss 0.071775, time 49.89ms
+iter 8600: loss 0.068597, time 49.89ms
+lr=0.001425
+iter 8610: loss 0.065284, time 49.92ms
+iter 8620: loss 0.069822, time 49.88ms
+iter 8630: loss 0.083112, time 49.88ms
+iter 8640: loss 0.075034, time 49.89ms
+iter 8650: loss 0.075296, time 49.90ms
+iter 8660: loss 0.079949, time 49.87ms
+iter 8670: loss 0.075139, time 49.92ms
+iter 8680: loss 0.071594, time 49.89ms
+iter 8690: loss 0.077614, time 49.92ms
+iter 8700: loss 0.070723, time 49.90ms
+lr=0.001424
+iter 8710: loss 0.064668, time 49.91ms
+iter 8720: loss 0.061914, time 49.92ms
+iter 8730: loss 0.071629, time 50.50ms
+iter 8740: loss 0.071153, time 50.43ms
+iter 8750: loss 0.072054, time 49.58ms
+iter 8760: loss 0.072962, time 49.93ms
+iter 8770: loss 0.075688, time 49.86ms
+iter 8780: loss 0.081120, time 49.89ms
+iter 8790: loss 0.067271, time 49.88ms
+iter 8800: loss 0.071232, time 49.89ms
+lr=0.001422
+iter 8810: loss 0.069167, time 49.85ms
+iter 8820: loss 0.081960, time 49.91ms
+iter 8830: loss 0.076030, time 49.90ms
+iter 8840: loss 0.073341, time 49.90ms
+iter 8850: loss 0.075742, time 49.88ms
+iter 8860: loss 0.082802, time 49.87ms
+iter 8870: loss 0.077834, time 49.90ms
+iter 8880: loss 0.074055, time 49.88ms
+iter 8890: loss 0.069672, time 49.93ms
+iter 8900: loss 0.070246, time 49.90ms
+lr=0.001420
+iter 8910: loss 0.075944, time 49.88ms
+iter 8920: loss 0.089893, time 50.43ms
+iter 8930: loss 0.068953, time 50.45ms
+iter 8940: loss 0.077539, time 49.50ms
+iter 8950: loss 0.063732, time 49.94ms
+iter 8960: loss 0.068879, time 49.93ms
+iter 8970: loss 0.080981, time 49.91ms
+iter 8980: loss 0.074457, time 49.94ms
+iter 8990: loss 0.073642, time 50.00ms
+step 9000: train loss 0.057187, val loss 0.056965
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.251301 sec
+iter 9000: loss 0.072965, time 7920.03ms
+lr=0.001418
+iter 9010: loss 0.067153, time 51.11ms
+iter 9020: loss 0.062276, time 50.57ms
+iter 9030: loss 0.052413, time 49.55ms
+iter 9040: loss 0.053173, time 49.94ms
+iter 9050: loss 0.058000, time 49.92ms
+iter 9060: loss 0.057963, time 49.90ms
+iter 9070: loss 0.066166, time 49.71ms
+iter 9080: loss 0.056874, time 49.92ms
+iter 9090: loss 0.060724, time 49.90ms
+iter 9100: loss 0.063656, time 49.91ms
+lr=0.001416
+iter 9110: loss 0.075939, time 49.91ms
+iter 9120: loss 0.077326, time 49.94ms
+iter 9130: loss 0.075158, time 49.94ms
+iter 9140: loss 0.072764, time 49.95ms
+iter 9150: loss 0.088598, time 49.94ms
+iter 9160: loss 0.070328, time 49.94ms
+iter 9170: loss 0.073069, time 49.96ms
+iter 9180: loss 0.069669, time 49.98ms
+iter 9190: loss 0.068952, time 49.93ms
+iter 9200: loss 0.069421, time 50.50ms
+lr=0.001415
+iter 9210: loss 0.069160, time 50.54ms
+iter 9220: loss 0.066811, time 49.53ms
+iter 9230: loss 0.067510, time 49.96ms
+iter 9240: loss 0.073214, time 49.87ms
+iter 9250: loss 0.064124, time 49.91ms
+iter 9260: loss 0.066238, time 49.95ms
+iter 9270: loss 0.061975, time 49.93ms
+iter 9280: loss 0.067274, time 49.93ms
+iter 9290: loss 0.071382, time 49.92ms
+iter 9300: loss 0.063993, time 49.91ms
+lr=0.001413
+iter 9310: loss 0.071458, time 49.90ms
+iter 9320: loss 0.077212, time 49.93ms
+iter 9330: loss 0.117175, time 49.94ms
+iter 9340: loss 0.071840, time 49.96ms
+iter 9350: loss 0.070848, time 50.01ms
+iter 9360: loss 0.074415, time 49.88ms
+iter 9370: loss 0.070778, time 49.93ms
+iter 9380: loss 0.074203, time 49.91ms
+iter 9390: loss 0.070370, time 50.55ms
+iter 9400: loss 0.068608, time 50.52ms
+lr=0.001411
+iter 9410: loss 0.087950, time 49.55ms
+iter 9420: loss 0.069533, time 49.93ms
+iter 9430: loss 0.086672, time 49.91ms
+iter 9440: loss 0.086981, time 49.95ms
+iter 9450: loss 0.077335, time 49.89ms
+iter 9460: loss 0.082610, time 49.92ms
+iter 9470: loss 0.084288, time 49.94ms
+iter 9480: loss 0.077835, time 49.96ms
+iter 9490: loss 0.077163, time 49.95ms
+iter 9500: loss 0.085102, time 49.68ms
+lr=0.001409
+iter 9510: loss 0.086239, time 49.71ms
+iter 9520: loss 0.072809, time 50.00ms
+iter 9530: loss 0.084237, time 49.98ms
+iter 9540: loss 0.096547, time 50.00ms
+iter 9550: loss 0.073758, time 50.03ms
+iter 9560: loss 0.076096, time 49.69ms
+iter 9570: loss 0.069022, time 50.07ms
+iter 9580: loss 0.066435, time 50.89ms
+iter 9590: loss 0.063277, time 50.10ms
+iter 9600: loss 0.070473, time 49.52ms
+lr=0.001407
+iter 9610: loss 0.071737, time 49.92ms
+iter 9620: loss 0.069236, time 49.84ms
+iter 9630: loss 0.070570, time 49.89ms
+iter 9640: loss 0.062135, time 49.91ms
+iter 9650: loss 0.065628, time 49.96ms
+iter 9660: loss 0.067359, time 49.99ms
+iter 9670: loss 0.062164, time 49.95ms
+iter 9680: loss 0.067371, time 49.73ms
+iter 9690: loss 0.063324, time 49.91ms
+iter 9700: loss 0.066069, time 49.70ms
+lr=0.001405
+iter 9710: loss 0.063690, time 49.94ms
+iter 9720: loss 0.068036, time 49.70ms
+iter 9730: loss 0.056253, time 49.94ms
+iter 9740: loss 0.059980, time 49.93ms
+iter 9750: loss 0.059184, time 49.94ms
+iter 9760: loss 0.062939, time 49.93ms
+iter 9770: loss 0.059875, time 50.45ms
+iter 9780: loss 0.057857, time 50.23ms
+iter 9790: loss 0.060608, time 49.63ms
+iter 9800: loss 0.061205, time 50.53ms
+lr=0.001403
+iter 9810: loss 0.051559, time 49.56ms
+iter 9820: loss 0.060159, time 49.98ms
+iter 9830: loss 0.060334, time 49.79ms
+iter 9840: loss 0.056742, time 49.98ms
+iter 9850: loss 0.060676, time 49.76ms
+iter 9860: loss 0.060344, time 49.97ms
+iter 9870: loss 0.063909, time 49.89ms
+iter 9880: loss 0.056549, time 49.96ms
+iter 9890: loss 0.075134, time 49.93ms
+iter 9900: loss 0.064304, time 49.96ms
+lr=0.001401
+iter 9910: loss 0.069885, time 49.96ms
+iter 9920: loss 0.070962, time 49.95ms
+iter 9930: loss 0.057693, time 49.96ms
+iter 9940: loss 0.060260, time 50.06ms
+iter 9950: loss 0.069149, time 49.98ms
+iter 9960: loss 0.054029, time 50.72ms
+iter 9970: loss 0.057771, time 51.25ms
+iter 9980: loss 0.054719, time 49.80ms
+iter 9990: loss 0.060857, time 49.94ms
+step 10000: train loss 0.055824, val loss 0.055708
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+Checkpoint saving time: 2.335104 sec
+iter 10000: loss 0.075955, time 8005.53ms
+lr=0.001400
+
+SAMPLING:
+<|endoftext|>man. And to the matter at ten.
+
+LADY CAPULET:
+Never shall be so poor meat that Richard is widowGod'st!
+
+CAPULET:
+Go to the world;less judges up your battle look.
+
+LADY CAPULET:
+What, you that you work the morning'steth all:
+And, so look back, and the Earl of power,
+Prayfire with their bodies saw,
+So dukes it fly that I will of those that the child:
+The sweet villain liege; from Lord of Lancaster;
+And ask it with thy mind from thy marks.
+
+CAPULET:
+Ha! she's a cruel and wretched man as you live! leave
+CAPULET:
+Are they not strange one day to Juliet? bad in's womb
+But where it will hear me with a luckless eye.
+
+CAPULET:
+Thy day
+Time spent: 541.1940777301788 seconds
+
+---
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python nGPT_train.py --eval_only=True --init_from='resume'
+tokens per iteration will be: 16,384
+Current Directory: /home/santiago/Desktop/mechanical-offering/2 - nGPT
+Overriding: eval_only = True
+Overriding: init_from = resume
+found 1 shards for split train
+found 1 shards for split val
+Resuming training from /home/santiago/Desktop/mechanical-offering/2 - nGPT/shakespeare
+/home/santiago/Desktop/mechanical-offering/2 - nGPT/nGPT_train.py:285: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(ckpt_path, map_location=device)
+number of parameters: 13.93M
+Model initialization/loading time: 0.191942 sec
+num decayed parameter tensors: 26, with 13,926,400 parameters
+num non-decayed parameter tensors: 17, with 55,936 parameters
+using fused AdamW: True
+compiling the model... (takes a ~minute)
+learning_rate: 0.001500
+min_lr: 0.000000
+max_iters: 60000.000000
+lr_decay_iters: 60000.000000
+warmup_iters: 0.000000
+batch_size: 64.000000
+gradient_accumulation_steps: 1.000000
+block_size: 256.000000
+weight_decay: 0.000000
+Time spent: 1.610471487045288 seconds
+starting_iter_num: 10000
+step 10000: train loss 0.055715, val loss 0.055715
+
+CONVERSATION BEGINS (type 'exit()' to quit)
+>>> Romeo
+<|endoftext|>
+Romeo what cure within; an this wooing suffer.
+
+WARWICK:
+Peace, Warwick! God forbid our loving friends,
+An after hours of love and theirDoes or permissiveRemaining on
+Would seem upon the ennob you would.
+
+YORK:
+Of these weeping souls, from Clarence, my lord?
+
+EDWARD:
+Suppose honour first, and thou wilt knowist thee,
+A proud is grown bankrupt, to them,
+To kings and your dost free dangers;
+Say for yourself of them in the sky, and will
+The hang forthwithy thoughts of a word is changed.
+
+PAULINA:
+Hold, therefore at your own part the Duke of Norfolk,
+So high lord Juliet lives.
+
+NORFie! what a little better un last to be joy?
+
+GLOUCESTER:
+Ay me! a order is too noble tribunes;
+The rare of my
+>>> Juliet
+<|endoftext|>
+Romeo what cure within; an this wooing suffer.
+
+WARWICK:
+Peace, Warwick! God forbid our loving friends,
+An after hours of love and theirDoes or permissiveRemaining on
+Would seem upon the ennob you would.
+
+YORK:
+Of these weeping souls, from Clarence, my lord?
+
+EDWARD:
+Suppose honour first, and thou wilt knowist thee,
+A proud is grown bankrupt, to them,
+To kings and your dost free dangers;
+Say for yourself of them in the sky, and will
+The hang forthwithy thoughts of a word is changed.
+
+PAULINA:
+Hold, therefore at your own part the Duke of Norfolk,
+So high lord Juliet lives.
+
+NORFie! what a little better un last to be joy?
+
+GLOUCESTER:
+Ay me! a order is too noble tribunes;
+The rare of my
+Juliet there was at Salisbury!
+
+Second Keeper:
+Your victory! what said that day was better than amazed.
+
+OXFRIAR LAURENCE:
+There is full of valour's too.
+
+WARWICK:
+Can ever perform'd our mother is far off.
+
+MENENIUS:
+Romeo thatRenowned light.
+
+SICINIUS:
+Can find it, O king return'd with unruly man:
+Believe me that honour gall'd whose daughter of honour
+More penitent trade are those that live. besides gentleorrow and worth:
+We purpose die lord himself, God's unruly
+Ere thy kindness at the mine. Doth myucy so prove mine; like mine, or by thee! an Edward's envious thrusten:
+Nothing so of Elizabeth, himself a deed is a villain:
+And so perfect hastily sun breaks object it were I would tell her.
+
+>>> To be or not to be,
+ lord Juliet lives.
+
+NORFie! what a little better un last to be joy?
+
+GLOUCESTER:
+Ay me! a order is too noble tribunes;
+The rare of my
+Juliet there was at Salisbury!
+
+Second Keeper:
+Your victory! what said that day was better than amazed.
+
+OXFRIAR LAURENCE:
+There is full of valour's too.
+
+WARWICK:
+Can ever perform'd our mother is far off.
+
+MENENIUS:
+Romeo thatRenowned light.
+
+SICINIUS:
+Can find it, O king return'd with unruly man:
+Believe me that honour gall'd whose daughter of honour
+More penitent trade are those that live. besides gentleorrow and worth:
+We purpose die lord himself, God's unruly
+Ere thy kindness at the mine. Doth myucy so prove mine; like mine, or by thee! an Edward's envious thrusten:
+Nothing so of Elizabeth, himself a deed is a villain:
+And so perfect hastily sun breaks object it were I would tell her.
+
+To be or not to be, that will proclaim a satisfaction.
+
+All:
+By the slaughter out a quiet; hence,
+And little ones! twain, my needful sweetYour extremity.
+She speaks grief is worthy gentleman, more true heart,
+As mayies for word from a door, or end.
+
+ you hope to leave of York too early thy mother in thine:
+Hold, YORK: of men are duty.
+
+SICINIUS:
+So says, we hope the ear, that hateful prayers;
+Unless mine own report the past ho!
+Who suck his suppers Warwick, you,
+In weeds, will make the contract, Henry,
+In Lord Stanley age; bid her love, and apparel.
+
+DUKE VINCENTIO:
+The break out one part chide the Tower, and news thou shalt think comfort hath Clifford; long.'
+
+ANGELO:
+ husband and immortal mock me stay with your retirementI
+>>> My love for you 
+, or by thee! an Edward's envious thrusten:
+Nothing so of Elizabeth, himself a deed is a villain:
+And so perfect hastily sun breaks object it were I would tell her.
+
+To be or not to be, that will proclaim a satisfaction.
+
+All:
+By the slaughter out a quiet; hence,
+And little ones! twain, my needful sweetYour extremity.
+She speaks grief is worthy gentleman, more true heart,
+As mayies for word from a door, or end.
+
+ you hope to leave of York too early thy mother in thine:
+Hold, YORK: of men are duty.
+
+SICINIUS:
+So says, we hope the ear, that hateful prayers;
+Unless mine own report the past ho!
+Who suck his suppers Warwick, you,
+In weeds, will make the contract, Henry,
+In Lord Stanley age; bid her love, and apparel.
+
+DUKE VINCENTIO:
+The break out one part chide the Tower, and news thou shalt think comfort hath Clifford; long.'
+
+ANGELO:
+ husband and immortal mock me stay with your retirementI
+My love for you  how much lenity: O, gentle wings,
+And hide my life, the leader to over. Thou Gloucester, we hear how I made
+Unto hope once before your company for royalty them against
+To grights. But I'll make myself:
+The woe pierce by tenderness; if his ear to see Tranio!Say, peace turn Warwick,
+Which last follow'd out very limb now villain's by queen!
+The bastard but an them out many tears:
+Which then a valiant fo monarch days was them hither,
+Which shows off; it please thee oft must be the other's death to wait upon him.
+Than get yerusts on God hath at her: hum dearth
+Again out this oath two may steal breath; which if thine eye do condemn'd
+Which may scorn to do out his plain rebel, can honour!
+Dry: Warwick call it that from my doing art not so: die that follow
+>>> I am hit!   
+KE VINCENTIO:
+The break out one part chide the Tower, and news thou shalt think comfort hath Clifford; long.'
+
+ANGELO:
+ husband and immortal mock me stay with your retirementI
+My love for you  how much lenity: O, gentle wings,
+And hide my life, the leader to over. Thou Gloucester, we hear how I made
+Unto hope once before your company for royalty them against
+To grights. But I'll make myself:
+The woe pierce by tenderness; if his ear to see Tranio!Say, peace turn Warwick,
+Which last follow'd out very limb now villain's by queen!
+The bastard but an them out many tears:
+Which then a valiant fo monarch days was them hither,
+Which shows off; it please thee oft must be the other's death to wait upon him.
+Than get yerusts on God hath at her: hum dearth
+Again out this oath two may steal breath; which if thine eye do condemn'd
+Which may scorn to do out his plain rebel, can honour!
+Dry: Warwick call it that from my doing art not so: die that follow
+I am hit! shrift.
+
+TRANIO:
+And say she's Duke of Gloucester receive.
+That they have been two are you into my request?
+
+ANGELThanks, with a visor:
+Where all the view of need of adversaries-se;
+For what worthily met thee in the dullond coz, whose breath to-night;
+And, by much grief!
+
+Bes were all remember like me.
+
+Pray, myself in my heartily nor stay:
+But if I bear the thing and enter'd from my true ears,
+For God wild griefar wherein walk, the English crown,
+Thou wooing Claudio! tatter and follow me well:
+For York is put the worst the benefit of love me only; and made
+Some scolding very charge thee Ratclout;
+In war within the wild-de!
+In whose venom and great accuse her I were he, sweet
+That she
+>>> I am about to die
+ two may steal breath; which if thine eye do condemn'd
+Which may scorn to do out his plain rebel, can honour!
+Dry: Warwick call it that from my doing art not so: die that follow
+I am hit! shrift.
+
+TRANIO:
+And say she's Duke of Gloucester receive.
+That they have been two are you into my request?
+
+ANGELThanks, with a visor:
+Where all the view of need of adversaries-se;
+For what worthily met thee in the dullond coz, whose breath to-night;
+And, by much grief!
+
+Bes were all remember like me.
+
+Pray, myself in my heartily nor stay:
+But if I bear the thing and enter'd from my true ears,
+For God wild griefar wherein walk, the English crown,
+Thou wooing Claudio! tatter and follow me well:
+For York is put the worst the benefit of love me only; and made
+Some scolding very charge thee Ratclout;
+In war within the wild-de!
+In whose venom and great accuse her I were he, sweet
+That she
+I am about to die for that be ancient peace as free
+That I did expect out and blunt them'lded with thy brother'?
+Bastant:
+And mortal my friend with modesty, your conference
+Of a breast, ever mayst mine--
+Romeo a false doth make
+Which often walk and happy days, 'tis much,
+To make Ross and bold are come.
+
+GLOUCESTER:
+Like enem unruly royal self-up of ancient angel bid him.
+
+PRINCE:
+And the utter'd Katharina, and tell it out down place old.
+
+Lord Marshal:
+And going, not strange, not mine ownink'd, the one thing; than peace with the child! come, the face to this, good stay.
+
+PERDITA:
+ place yet we did pardon'd with the earth and talk of your house.
+
+GLOUC food of happiness;ain and o' the golden
+>>> exit()
+Time spent: 205.15242266654968 seconds

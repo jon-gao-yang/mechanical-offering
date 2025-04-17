@@ -1,2 +1,4 @@
+ckpt.pt
 __pycache__/
-edu_fineweb10B/*.npy
+datasets/edu_fineweb10B/
+datasets/ultrachat_200k/

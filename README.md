@@ -16,6 +16,10 @@ Notes:
 - `pip install datasets` for huggingface datasets
 - `pip install tiktoken` for tiktoken tokenizer library
 - `pip install flash-attn --no-build-isolation` for [flash-attention](https://github.com/Dao-AILab/flash-attention)
+- `datasets/shakespeare` train shard is a renamed copy of val shard
+- restarting computer helps free up gpu vram
+- `nvidia-smi` to monitor gpu usage
+- gitignore just stops working for some files/directories sometimes, and recloning the repo from github and moving all the old files over EXCEPT .GIT FOLDER fixes the problem (???)
 
 Recipe to convert Transformer to normalized Transformer [[source](https://arxiv.org/abs/2410.01131)] [[source](https://github.com/NVIDIA/ngpt)]:
 1. Remove all normalization layers (RMSNorm, LayerNorm, etc.), weight decay, and learning rate warmup.
@@ -37,10 +41,3 @@ where $s_{uv}$ is treated with $s_{uv,init} = 1$ and $s_{uv,scale} = 1$ .
 $z ← zs_z$\
 where $s_z$ is treated with $s_{z,init} = 1$ and
 $s_{z,scale} = 1/ dmodel$ .
-
-### TODO:
-nGPT_train.py:
-- fix dataloader (use tiktoken and datasets directly)
-- change default args (init_from = 'resume', eval_only = True, always_save_checkpoint = False)
-- add sample()
-- add conversation()
