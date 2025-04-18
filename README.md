@@ -20,6 +20,7 @@ Notes:
 - restarting computer helps free up gpu vram
 - `nvidia-smi` to monitor gpu usage
 - gitignore just stops working for some files/directories sometimes, and recloning the repo from github and moving all the old files over EXCEPT .GIT FOLDER fixes the problem (???)
+- on windows, python multiprocessing doesn't work out of the box because windows recursively creates subprocess. to fix, add `if __name__ == '__main__':` check (from https://stackoverflow.com/a/18205006)
 
 Recipe to convert Transformer to normalized Transformer [[source](https://arxiv.org/abs/2410.01131)] [[source](https://github.com/NVIDIA/ngpt)]:
 1. Remove all normalization layers (RMSNorm, LayerNorm, etc.), weight decay, and learning rate warmup.
@@ -41,3 +42,6 @@ where $s_{uv}$ is treated with $s_{uv,init} = 1$ and $s_{uv,scale} = 1$ .
 $z ← zs_z$\
 where $s_z$ is treated with $s_{z,init} = 1$ and
 $s_{z,scale} = 1/ dmodel$ .
+
+NOTE:
+- use better tokenizer next time (gpt2 doesn't have imstart, imstep, imhead special tokens for fine tuning)

@@ -55,6 +55,7 @@ from datetime import timedelta
 from datasets import load_dataset # huggingface datasets
 from ast import literal_eval # used in configurator.py
 from nGPT_model import GPTConfig, GPT
+from nGPT_hellaswag import render_example, iterate_examples, get_most_likely_row
 
 
 # ------------------------------------------- [ 1/5 : INITIALIZATIONS ] -------------------------------------------
@@ -442,6 +443,9 @@ def sample():
 
 @torch.no_grad()
 def conversation():
+
+    hellaswag() # this is not in the training loop because torch.compile breaks it
+
     model.eval()
     ids = torch.tensor([enc.eot_token])
     ids = ids.pin_memory().to(device, non_blocking=True)
@@ -466,6 +470,31 @@ def conversation():
         tokens = enc.decode(ids.tolist())
         if tokens.count("exit()"): break
         print(tokens)
+
+def hellaswag():
+    assert compile == False, "karapthy says torch.compile breaks hellaswag eval"
+
+    num_correct_norm = 0
+    num_total = 0
+    for i, example in enumerate(iterate_examples("val")):
+        # only process examples where i % ddp_world_size == ddp_rank
+        if i % ddp_world_size != ddp_rank:
+            continue
+        # render the example into tokens and labels
+        _, tokens, mask, label = render_example(example)
+        tokens = tokens.to(device)
+        mask = mask.to(device)
+        # get the logits
+        with torch.no_grad():
+            with torch.autocast(device_type=device_type, dtype=torch.bfloat16):
+                logits, loss = model(tokens)
+            pred_norm = get_most_likely_row(tokens, mask, logits)
+        num_total += 1
+        num_correct_norm += int(pred_norm == label)
+
+    acc_norm = num_correct_norm / num_total
+    if master_process:
+        print(f"HellaSwag accuracy: {num_correct_norm}/{num_total}={acc_norm:.4f}")
 
 # ------------------------------------------- [ 5/5 : TRAINING LOOP ] -------------------------------------------
 
