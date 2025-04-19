@@ -1,4 +1,5 @@
 ckpt.pt
+stat
 __pycache__/
 datasets/edu_fineweb10B/
 datasets/ultrachat_200k/

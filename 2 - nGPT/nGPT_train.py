@@ -115,7 +115,7 @@ if (1):
     n_layer = 4
     n_head = 4
     n_embd = 256
-    block_size = 512 # = context/sequence length
+    block_size = 384 # = context/sequence length
 
 if (use_nGPT == 0):
     min_lr = 0.0 
