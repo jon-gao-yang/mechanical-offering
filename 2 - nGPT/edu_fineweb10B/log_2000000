@@ -1,0 +1,5 @@
+---
+COMMAND:
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python nGPT_train.py
+
+OUTPUT:

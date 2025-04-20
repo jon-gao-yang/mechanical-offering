@@ -66,7 +66,7 @@ dataset = "edu_fineweb10B" # NOTE: change this, eval_interval, log_interval, and
 data_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'datasets/' + dataset)
 out_dir = os.path.join(os.path.dirname(__file__), dataset) # out_dir='./littleshakespeare' # NOTE: CHANGED FOR FINEWEBTEXT DATASET
 eval_only = False # NOTE: THIS PROGRAM STARTS COMMAND LINE CONVERSATION IF EVAL_ONLY == TRUE, ELSE TRAINS MODEL (FROM SCRATCH UNLESS OVERRIDDEN BY COMMAND LINE ARGS)
-init_from = 'resume' if eval_only else 'scratch' # NOTE: since vocab_size was rounded up for efficiency, sampling from untrained model gives out-of-bounds error when decoding
+init_from = 'resume' # NOTE: since vocab_size was rounded up for efficiency, sampling from untrained model gives out-of-bounds error when decoding
 
 # model size and seqlen
 n_layer = 4
@@ -74,8 +74,8 @@ n_head = 4
 n_embd = 256
 block_size = 384 # = context/sequence length
 
-eval_interval = 10000
-log_interval = 1000
+eval_interval = 20000
+log_interval = 2000
 eval_iters = block_size
 always_save_checkpoint = True # if True, always save a checkpoint after each eval
 
@@ -86,7 +86,7 @@ wandb_run_name = 'gpt2' # 'run' + str(time.time())
 
 # data
 gradient_accumulation_steps = 1 # used to simulate larger batch sizes
-batch_size = 64 # if gradient_accumulation_steps > 1, this is the micro-batch size
+batch_size = 64 # if gradient_accumulation_steps > 1, this is the micro-batch size (NOTE: karpathy has 64 for each GPU, not total)
 
 # model
 dropout = 0.0 # for pretraining 0 is good, for finetuning try 0.1+
@@ -171,14 +171,15 @@ ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torc
 ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=device_type, dtype=ptdtype)
 
 # logfile setup
-logfile = None if eval_only else open(os.path.join(out_dir, "log_" + max_iters), "a")
-def log(text: str):
-    print(text, file = logfile)
+def logging(text: str):
+    with open(os.path.join(out_dir, "log_" + str(max_iters)), "a") as logfile:
+        print(text, file = logfile)
+if eval_only: logging = print
 
 # initial time and print statements
 tlaunch = time.time()
-log("Current Directory:", os.getcwd())
-log(f"tokens per iteration will be: {tokens_per_iter:,}")
+logging("Current Directory: " + os.getcwd())
+logging(f"tokens per iteration will be: {tokens_per_iter:,}")
 
 # --------------------- (overrides above I/O from command line or config file) ---------------------
 config_keys = [k for k,v in globals().items() if not k.startswith('_') and isinstance(v, (int, float, bool, str))]
@@ -188,9 +189,9 @@ for arg in sys.argv[1:]:
         # assume it's the name of a config file
         assert not arg.startswith('--')
         config_file = arg
-        log(f"Overriding config with {config_file}:")
+        logging(f"Overriding config with {config_file}:")
         with open(config_file) as f:
-            log(f.read())
+            logging(f.read())
         exec(open(config_file).read())
     else:
         # assume it's a --key=value argument
@@ -207,7 +208,7 @@ for arg in sys.argv[1:]:
             # ensure the types match ok
             assert type(attempt) == type(globals()[key])
             # cross fingers
-            log(f"Overriding: {key} = {attempt}")
+            logging(f"Overriding: {key} = {attempt}")
             globals()[key] = attempt
         else:
             raise ValueError(f"Unknown config key: {key}")
@@ -240,7 +241,7 @@ class DataLoaderLite: # NOTE: based on karpathy/build-nanogpt/train_gpt2.py
         self.shards = shards
         assert len(shards) > 0, f"no shards found for split {split}"
         if master_process:
-            log(f"found {len(shards)} shards for split {split}")
+            logging(f"found {len(shards)} shards for split {split}")
         self.reset()
 
     def reset(self):
@@ -278,15 +279,15 @@ model_args = dict(use_nGPT=use_nGPT, n_layer=n_layer, n_head=n_head, n_embd=n_em
                   bias=bias, vocab_size=None, dropout=dropout) # start with model_args from command line
 if init_from == 'scratch':
     # init a new model from scratch
-    log("Initializing a new model from scratch")
+    logging("Initializing a new model from scratch")
     # determine the vocab size we'll use for from-scratch training
     if meta_vocab_size is None:
-        log("defaulting to vocab_size of GPT-2 to 50304 (50257 rounded up for efficiency)")
+        logging("defaulting to vocab_size of GPT-2 to 50304 (50257 rounded up for efficiency)")
     model_args['vocab_size'] = meta_vocab_size if meta_vocab_size is not None else 50304
     gptconf = GPTConfig(**model_args)
-    model = GPT(gptconf)
+    model = GPT(gptconf, logging)
 elif init_from == 'resume':
-    log(f"Resuming training from {out_dir}")
+    logging(f"Resuming training from {out_dir}")
     # resume training from a checkpoint.
     ckpt_path = os.path.join(out_dir, 'ckpt.pt')
     checkpoint = torch.load(ckpt_path, map_location=device)
@@ -297,7 +298,7 @@ elif init_from == 'resume':
         model_args[k] = checkpoint_model_args[k]
     # create the model
     gptconf = GPTConfig(**model_args)
-    model = GPT(gptconf)
+    model = GPT(gptconf, logging)
     state_dict = checkpoint['model']
     # fix the keys of the state dictionary :(
     # honestly no idea how checkpoints sometimes get this prefix, have to debug more
@@ -312,7 +313,7 @@ if block_size < model.config.block_size:
     model.crop_block_size(block_size)
     model_args['block_size'] = block_size # so that the checkpoint will have the right value
 model.to(device)
-log("Model initialization/loading time: %f sec" % (time.time()-tmodelinit_begin))
+logging("Model initialization/loading time: %f sec" % (time.time()-tmodelinit_begin))
 
 # optimizer
 optimizer = model.configure_optimizers(weight_decay, learning_rate, (beta1, beta2), device_type)
@@ -322,7 +323,7 @@ checkpoint = None # free up memory
 
 # compile the model
 if compile:
-    log("compiling the model... (takes a ~minute)")
+    logging("compiling the model... (takes a ~minute)")
     unoptimized_model = model
     model = torch.compile(model) # requires PyTorch 2.0
 
@@ -442,8 +443,8 @@ def sample():
 
             ids = torch.cat((ids, token))
 
-    log('\nSAMPLING:')
-    log(enc.decode(ids.tolist()))
+    logging('\nSAMPLING:')
+    logging(enc.decode(ids.tolist()))
 
 @torch.no_grad()
 def conversation():
@@ -453,7 +454,7 @@ def conversation():
     model.eval()
     ids = torch.tensor([enc.eot_token])
     ids = ids.pin_memory().to(device, non_blocking=True)
-    log("\nCONVERSATION BEGINS (type 'exit()' to quit)")
+    logging("\nCONVERSATION BEGINS (type 'exit()' to quit)")
 
     while(1):
         ids_new = torch.tensor(enc.encode_ordinary(input(">>> ")))
@@ -473,7 +474,7 @@ def conversation():
 
         tokens = enc.decode(ids.tolist())
         if tokens.count("exit()"): break
-        log(tokens)
+        logging(tokens)
 
 @torch.no_grad()
 def hellaswag():
@@ -498,20 +499,20 @@ def hellaswag():
 
     acc_norm = num_correct_norm / num_total
     if master_process:
-        log(f"HellaSwag accuracy: {num_correct_norm}/{num_total}={acc_norm:.4f}")
+        logging(f"HellaSwag accuracy: {num_correct_norm}/{num_total}={acc_norm:.4f}")
 
 # ------------------------------------------- [ 5/5 : TRAINING LOOP ] -------------------------------------------
 
 if master_process:
-    log("learning_rate: %f" % (learning_rate))
-    log("min_lr: %f" % (min_lr))
-    log("max_iters: %f" % (max_iters))
-    log("lr_decay_iters: %f" % (lr_decay_iters))
-    log("warmup_iters: %f" % (warmup_iters))
-    log("batch_size: %f" % (batch_size))
-    log("gradient_accumulation_steps: %f" % (gradient_accumulation_steps))
-    log("block_size: %f" % (block_size))
-    log("weight_decay: %f" % (weight_decay))
+    logging("learning_rate: %f" % (learning_rate))
+    logging("min_lr: %f" % (min_lr))
+    logging("max_iters: %f" % (max_iters))
+    logging("lr_decay_iters: %f" % (lr_decay_iters))
+    logging("warmup_iters: %f" % (warmup_iters))
+    logging("batch_size: %f" % (batch_size))
+    logging("gradient_accumulation_steps: %f" % (gradient_accumulation_steps))
+    logging("block_size: %f" % (block_size))
+    logging("weight_decay: %f" % (weight_decay))
 
 stat_fname = out_dir + "/stat"
 if master_process:
@@ -530,9 +531,9 @@ if master_process:
         file = open(stat_fname, "a")
 
 time_spent = time.time() - tlaunch
-log(f"Time spent: {time_spent} seconds")
+logging(f"Time spent: {time_spent} seconds")
 starting_iter_num = iter_num
-log("starting_iter_num: %d" % iter_num)
+logging("starting_iter_num: %d" % iter_num)
 
 # logging
 if wandb_log and master_process:
@@ -555,7 +556,7 @@ while True:
         torch.manual_seed(local_seed)
         torch.cuda.manual_seed(local_seed)
         #if (iter_num % 10 == 0):    # uncomment to make sure different seeds are used
-        #    log("iter: %d seed: %d" % (iter_num, local_seed))
+        #    logging("iter: %d seed: %d" % (iter_num, local_seed))
 
     # determine and set the learning rate for this iteration
     lr = get_lr(iter_num) if decay_lr else learning_rate
@@ -567,8 +568,8 @@ while True:
         rng_state_pytorch = torch.get_rng_state()
         rng_state_bytes = rng_state_pytorch.numpy().tobytes()
         losses = estimate_loss()
-        log(f"step {iter_num}: train loss {losses['train']:.6f}, val loss {losses['val']:.6f}")
-        log("lr=%f" % lr)
+        logging(f"step {iter_num}: train loss {losses['train']:.6f}, val loss {losses['val']:.6f}")
+        logging("lr=%f" % lr)
        
         if wandb_log:
             wandb.log({
@@ -590,9 +591,9 @@ while True:
                     'rng_state_pytorch_bytes': rng_state_bytes,
                     'rng_state_numpy': np.random.get_state()
                 }
-                log(f"saving checkpoint to {out_dir}")
+                logging(f"saving checkpoint to {out_dir}")
                 torch.save(checkpoint, os.path.join(out_dir, 'ckpt.pt'))
-                log("Checkpoint saving time: %f sec" % (time.time()-tcheckpointsaving_begin))
+                logging("Checkpoint saving time: %f sec" % (time.time()-tcheckpointsaving_begin))
     
     if eval_only:
         conversation()
@@ -631,7 +632,7 @@ while True:
         # get loss as float. note: this is a CPU-GPU sync point
         # scale up to undo the division above, approximating the true total loss (exact would have been a sum)
         lossf = loss.item() * gradient_accumulation_steps
-        log(f"iter {iter_num}: loss {lossf:.6f}, time {dt*1000:.2f}ms")
+        logging(f"iter {iter_num}: loss {lossf:.6f}, time {dt*1000:.2f}ms")
     
     if (use_nGPT == 1):
         normalize_matrices()
@@ -659,8 +660,7 @@ while True:
     if iter_num > max_iters:
         break
 time_spent = time.time() - tlaunch
-log(f"Time spent: {time_spent} seconds")
-if not eval_only: logfile.close()
+logging(f"Time spent: {time_spent} seconds")
 if ddp:
     dist.barrier()
     dist.destroy_process_group()

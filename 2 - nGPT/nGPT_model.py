@@ -209,11 +209,12 @@ class RMSNorm(torch.nn.Module):
 
 class GPT(nn.Module):
 
-    def __init__(self, config):
+    def __init__(self, config, logging=print):
         super().__init__()
         assert config.vocab_size is not None
         assert config.block_size is not None
         self.config = config
+        self.logging = logging
 
         self.transformer = nn.ModuleDict(dict(
             wte = nn.Embedding(config.vocab_size, config.n_embd),
@@ -235,7 +236,7 @@ class GPT(nn.Module):
             if pn.endswith('c_proj.weight'):
                 torch.nn.init.normal_(p, mean=0.0, std=config.base_scale/math.sqrt(2 * config.n_layer))
         # report number of parameters
-        print("number of parameters: %.2fM" % (self.get_num_params()/1e6,))
+        self.logging("number of parameters: %.2fM" % (self.get_num_params()/1e6,))
     
         if (config.use_nGPT == 1):
             self.sz_init_value = 1.00
@@ -311,12 +312,12 @@ class GPT(nn.Module):
         ]
         num_decay_params = sum(p.numel() for p in decay_params)
         num_nodecay_params = sum(p.numel() for p in nodecay_params)
-        print(f"num decayed parameter tensors: {len(decay_params)}, with {num_decay_params:,} parameters")
-        print(f"num non-decayed parameter tensors: {len(nodecay_params)}, with {num_nodecay_params:,} parameters")
+        self.logging(f"num decayed parameter tensors: {len(decay_params)}, with {num_decay_params:,} parameters")
+        self.logging(f"num non-decayed parameter tensors: {len(nodecay_params)}, with {num_nodecay_params:,} parameters")
         # Create AdamW optimizer and use the fused version if it is available
         fused_available = 'fused' in inspect.signature(torch.optim.AdamW).parameters
         use_fused = fused_available and device_type == 'cuda' # NOTE: CHANGED FROM ORIGINAL
         extra_args = dict(fused=True) if use_fused else dict()
         optimizer = torch.optim.AdamW(optim_groups, lr=learning_rate, betas=betas, **extra_args)
-        print(f"using fused AdamW: {use_fused}")
+        self.logging(f"using fused AdamW: {use_fused}")
         return optimizer
