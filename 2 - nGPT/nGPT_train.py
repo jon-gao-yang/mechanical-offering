@@ -62,15 +62,21 @@ from nGPT_hellaswag import render_example, iterate_examples, get_most_likely_row
 
 # NOTE: MAKE SURE VARIABLES DON'T CHANGE BTWN TRAIN AND EVAL MODE
 # I/O (NOTE: CHANGE THESE WHEN RUNNING!!!)
-dataset = "edu_fineweb10B"
+dataset = "edu_fineweb10B" # NOTE: change this, eval_interval, log_interval, and max_iters (and logfile path in cli)
 data_root = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'datasets/' + dataset)
 out_dir = os.path.join(os.path.dirname(__file__), dataset) # out_dir='./littleshakespeare' # NOTE: CHANGED FOR FINEWEBTEXT DATASET
 eval_only = False # NOTE: THIS PROGRAM STARTS COMMAND LINE CONVERSATION IF EVAL_ONLY == TRUE, ELSE TRAINS MODEL (FROM SCRATCH UNLESS OVERRIDDEN BY COMMAND LINE ARGS)
 init_from = 'resume' if eval_only else 'scratch' # NOTE: since vocab_size was rounded up for efficiency, sampling from untrained model gives out-of-bounds error when decoding
 
+# model size and seqlen
+n_layer = 4
+n_head = 4
+n_embd = 256
+block_size = 384 # = context/sequence length
+
 eval_interval = 10000
 log_interval = 1000
-eval_iters = 200
+eval_iters = block_size
 always_save_checkpoint = True # if True, always save a checkpoint after each eval
 
 # wandb logging
@@ -87,14 +93,14 @@ dropout = 0.0 # for pretraining 0 is good, for finetuning try 0.1+
 bias = False # do we use bias inside LayerNorm and Linear layers?
 
 # adamw optimizer
-max_iters = 1000000 # total number of training iterations
+max_iters = 2000000 # total number of training iterations
 beta1 = 0.9
 beta2 = 0.95
 grad_clip = 1.0 # clip gradients at this value, or disable if == 0.0
 
 # learning rate decay settings
 decay_lr = True # whether to decay the learning rate
-lr_decay_iters = max_iters # should be ~= max_iters per Chinchilla
+lr_decay_iters = 1.01 * max_iters # should be ~= max_iters per Chinchilla
 
 # DDP settings
 backend = 'nccl' # 'nccl', 'gloo', etc.
@@ -102,20 +108,13 @@ backend = 'nccl' # 'nccl', 'gloo', etc.
 # system
 device = 'cuda' # examples: 'cpu', 'cuda', 'cuda:0', 'cuda:1' etc., or try 'mps' on macbooks
 dtype = 'bfloat16' if torch.cuda.is_available() and torch.cuda.is_bf16_supported() else 'float16' # 'float32', 'bfloat16', or 'float16', the latter will auto implement a GradScaler
-compile = True # use PyTorch 2.0 to compile the model to be faster
+compile = not eval_only # use PyTorch 2.0 to compile the model to be faster
 # 
 time_limit_seconds = 1000000000     # stop after x seconds 
 max_iters_per_launch = 1000000000   # stop after x steps of the current
 
 use_nGPT = 1
-learning_rate = 15e-4 
-
-# model size and seqlen
-if (1): 
-    n_layer = 4
-    n_head = 4
-    n_embd = 256
-    block_size = 384 # = context/sequence length
+learning_rate = 15e-4 * 2
 
 if (use_nGPT == 0):
     min_lr = 0.0 
@@ -157,11 +156,6 @@ else:
     ddp_world_size = 1
 tokens_per_iter = gradient_accumulation_steps * ddp_world_size * batch_size * block_size
 
-# initial time and print statements
-tlaunch = time.time()
-print("Current Directory:", os.getcwd())
-print(f"tokens per iteration will be: {tokens_per_iter:,}")
-
 # rng seeds
 local_seed = seed_offset
 np.random.seed(local_seed)
@@ -176,6 +170,16 @@ device_type = 'cuda' if 'cuda' in device else 'cpu' # for later use in torch.aut
 ptdtype = {'float32': torch.float32, 'bfloat16': torch.bfloat16, 'float16': torch.float16}[dtype]
 ctx = nullcontext() if device_type == 'cpu' else torch.amp.autocast(device_type=device_type, dtype=ptdtype)
 
+# logfile setup
+logfile = None if eval_only else open(os.path.join(out_dir, "log_" + max_iters), "a")
+def log(text: str):
+    print(text, file = logfile)
+
+# initial time and print statements
+tlaunch = time.time()
+log("Current Directory:", os.getcwd())
+log(f"tokens per iteration will be: {tokens_per_iter:,}")
+
 # --------------------- (overrides above I/O from command line or config file) ---------------------
 config_keys = [k for k,v in globals().items() if not k.startswith('_') and isinstance(v, (int, float, bool, str))]
 
@@ -184,9 +188,9 @@ for arg in sys.argv[1:]:
         # assume it's the name of a config file
         assert not arg.startswith('--')
         config_file = arg
-        print(f"Overriding config with {config_file}:")
+        log(f"Overriding config with {config_file}:")
         with open(config_file) as f:
-            print(f.read())
+            log(f.read())
         exec(open(config_file).read())
     else:
         # assume it's a --key=value argument
@@ -203,7 +207,7 @@ for arg in sys.argv[1:]:
             # ensure the types match ok
             assert type(attempt) == type(globals()[key])
             # cross fingers
-            print(f"Overriding: {key} = {attempt}")
+            log(f"Overriding: {key} = {attempt}")
             globals()[key] = attempt
         else:
             raise ValueError(f"Unknown config key: {key}")
@@ -236,7 +240,7 @@ class DataLoaderLite: # NOTE: based on karpathy/build-nanogpt/train_gpt2.py
         self.shards = shards
         assert len(shards) > 0, f"no shards found for split {split}"
         if master_process:
-            print(f"found {len(shards)} shards for split {split}")
+            log(f"found {len(shards)} shards for split {split}")
         self.reset()
 
     def reset(self):
@@ -274,15 +278,15 @@ model_args = dict(use_nGPT=use_nGPT, n_layer=n_layer, n_head=n_head, n_embd=n_em
                   bias=bias, vocab_size=None, dropout=dropout) # start with model_args from command line
 if init_from == 'scratch':
     # init a new model from scratch
-    print("Initializing a new model from scratch")
+    log("Initializing a new model from scratch")
     # determine the vocab size we'll use for from-scratch training
     if meta_vocab_size is None:
-        print("defaulting to vocab_size of GPT-2 to 50304 (50257 rounded up for efficiency)")
+        log("defaulting to vocab_size of GPT-2 to 50304 (50257 rounded up for efficiency)")
     model_args['vocab_size'] = meta_vocab_size if meta_vocab_size is not None else 50304
     gptconf = GPTConfig(**model_args)
     model = GPT(gptconf)
 elif init_from == 'resume':
-    print(f"Resuming training from {out_dir}")
+    log(f"Resuming training from {out_dir}")
     # resume training from a checkpoint.
     ckpt_path = os.path.join(out_dir, 'ckpt.pt')
     checkpoint = torch.load(ckpt_path, map_location=device)
@@ -308,7 +312,7 @@ if block_size < model.config.block_size:
     model.crop_block_size(block_size)
     model_args['block_size'] = block_size # so that the checkpoint will have the right value
 model.to(device)
-print("Model initialization/loading time: %f sec" % (time.time()-tmodelinit_begin))
+log("Model initialization/loading time: %f sec" % (time.time()-tmodelinit_begin))
 
 # optimizer
 optimizer = model.configure_optimizers(weight_decay, learning_rate, (beta1, beta2), device_type)
@@ -318,7 +322,7 @@ checkpoint = None # free up memory
 
 # compile the model
 if compile:
-    print("compiling the model... (takes a ~minute)")
+    log("compiling the model... (takes a ~minute)")
     unoptimized_model = model
     model = torch.compile(model) # requires PyTorch 2.0
 
@@ -438,21 +442,21 @@ def sample():
 
             ids = torch.cat((ids, token))
 
-    print('\nSAMPLING:')
-    print(enc.decode(ids.tolist()))
+    log('\nSAMPLING:')
+    log(enc.decode(ids.tolist()))
 
 @torch.no_grad()
 def conversation():
 
-    hellaswag() # this is not in the training loop because torch.compile breaks it
+    if dataset == 'edu_fineweb10B': hellaswag() # this is not in the training loop because torch.compile breaks it
 
     model.eval()
     ids = torch.tensor([enc.eot_token])
     ids = ids.pin_memory().to(device, non_blocking=True)
-    print("\nCONVERSATION BEGINS (type 'exit()' to quit)")
+    log("\nCONVERSATION BEGINS (type 'exit()' to quit)")
 
     while(1):
-        ids_new = torch.tensor(enc.encode_ordinary("\n" + input(">>> ")))
+        ids_new = torch.tensor(enc.encode_ordinary(input(">>> ")))
         ids_new = ids_new.pin_memory().to(device, non_blocking=True)
         ids = torch.cat((ids, ids_new))[-model_args['block_size']:]
 
@@ -469,8 +473,9 @@ def conversation():
 
         tokens = enc.decode(ids.tolist())
         if tokens.count("exit()"): break
-        print(tokens)
+        log(tokens)
 
+@torch.no_grad()
 def hellaswag():
     assert compile == False, "karapthy says torch.compile breaks hellaswag eval"
 
@@ -478,36 +483,35 @@ def hellaswag():
     num_total = 0
     for i, example in enumerate(iterate_examples("val")):
         # only process examples where i % ddp_world_size == ddp_rank
-        if i % ddp_world_size != ddp_rank:
+        if ddp and i % ddp_world_size != ddp_rank:
             continue
         # render the example into tokens and labels
         _, tokens, mask, label = render_example(example)
         tokens = tokens.to(device)
         mask = mask.to(device)
         # get the logits
-        with torch.no_grad():
-            with torch.autocast(device_type=device_type, dtype=torch.bfloat16):
-                logits, loss = model(tokens)
-            pred_norm = get_most_likely_row(tokens, mask, logits)
+        with ctx:
+            logits, loss = model(tokens)
+        pred_norm = get_most_likely_row(tokens, mask, logits)
         num_total += 1
         num_correct_norm += int(pred_norm == label)
 
     acc_norm = num_correct_norm / num_total
     if master_process:
-        print(f"HellaSwag accuracy: {num_correct_norm}/{num_total}={acc_norm:.4f}")
+        log(f"HellaSwag accuracy: {num_correct_norm}/{num_total}={acc_norm:.4f}")
 
 # ------------------------------------------- [ 5/5 : TRAINING LOOP ] -------------------------------------------
 
 if master_process:
-    print("learning_rate: %f" % (learning_rate))
-    print("min_lr: %f" % (min_lr))
-    print("max_iters: %f" % (max_iters))
-    print("lr_decay_iters: %f" % (lr_decay_iters))
-    print("warmup_iters: %f" % (warmup_iters))
-    print("batch_size: %f" % (batch_size))
-    print("gradient_accumulation_steps: %f" % (gradient_accumulation_steps))
-    print("block_size: %f" % (block_size))
-    print("weight_decay: %f" % (weight_decay))
+    log("learning_rate: %f" % (learning_rate))
+    log("min_lr: %f" % (min_lr))
+    log("max_iters: %f" % (max_iters))
+    log("lr_decay_iters: %f" % (lr_decay_iters))
+    log("warmup_iters: %f" % (warmup_iters))
+    log("batch_size: %f" % (batch_size))
+    log("gradient_accumulation_steps: %f" % (gradient_accumulation_steps))
+    log("block_size: %f" % (block_size))
+    log("weight_decay: %f" % (weight_decay))
 
 stat_fname = out_dir + "/stat"
 if master_process:
@@ -526,9 +530,9 @@ if master_process:
         file = open(stat_fname, "a")
 
 time_spent = time.time() - tlaunch
-print(f"Time spent: {time_spent} seconds")
+log(f"Time spent: {time_spent} seconds")
 starting_iter_num = iter_num
-print("starting_iter_num: %d" % iter_num)
+log("starting_iter_num: %d" % iter_num)
 
 # logging
 if wandb_log and master_process:
@@ -551,20 +555,20 @@ while True:
         torch.manual_seed(local_seed)
         torch.cuda.manual_seed(local_seed)
         #if (iter_num % 10 == 0):    # uncomment to make sure different seeds are used
-        #    print("iter: %d seed: %d" % (iter_num, local_seed))
+        #    log("iter: %d seed: %d" % (iter_num, local_seed))
 
     # determine and set the learning rate for this iteration
     lr = get_lr(iter_num) if decay_lr else learning_rate
     for param_group in optimizer.param_groups:
-        param_group['lr'] = lr 
+        param_group['lr'] = lr
 
     # evaluate the loss on train/val sets and write checkpoints
     if iter_num % eval_interval == 0 and master_process:
         rng_state_pytorch = torch.get_rng_state()
         rng_state_bytes = rng_state_pytorch.numpy().tobytes()
         losses = estimate_loss()
-        print(f"step {iter_num}: train loss {losses['train']:.6f}, val loss {losses['val']:.6f}")
-        print("lr=%f" % lr)
+        log(f"step {iter_num}: train loss {losses['train']:.6f}, val loss {losses['val']:.6f}")
+        log("lr=%f" % lr)
        
         if wandb_log:
             wandb.log({
@@ -586,9 +590,9 @@ while True:
                     'rng_state_pytorch_bytes': rng_state_bytes,
                     'rng_state_numpy': np.random.get_state()
                 }
-                print(f"saving checkpoint to {out_dir}")
+                log(f"saving checkpoint to {out_dir}")
                 torch.save(checkpoint, os.path.join(out_dir, 'ckpt.pt'))
-                print("Checkpoint saving time: %f sec" % (time.time()-tcheckpointsaving_begin))
+                log("Checkpoint saving time: %f sec" % (time.time()-tcheckpointsaving_begin))
     
     if eval_only:
         conversation()
@@ -627,7 +631,7 @@ while True:
         # get loss as float. note: this is a CPU-GPU sync point
         # scale up to undo the division above, approximating the true total loss (exact would have been a sum)
         lossf = loss.item() * gradient_accumulation_steps
-        print(f"iter {iter_num}: loss {lossf:.6f}, time {dt*1000:.2f}ms")
+        log(f"iter {iter_num}: loss {lossf:.6f}, time {dt*1000:.2f}ms")
     
     if (use_nGPT == 1):
         normalize_matrices()
@@ -655,7 +659,8 @@ while True:
     if iter_num > max_iters:
         break
 time_spent = time.time() - tlaunch
-print(f"Time spent: {time_spent} seconds")
+log(f"Time spent: {time_spent} seconds")
+if not eval_only: logfile.close()
 if ddp:
     dist.barrier()
     dist.destroy_process_group()

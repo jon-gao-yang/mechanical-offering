@@ -21,6 +21,8 @@ Notes:
 - `nvidia-smi` to monitor gpu usage
 - gitignore just stops working for some files/directories sometimes, and recloning the repo from github and moving all the old files over EXCEPT .GIT FOLDER fixes the problem (???)
 - on windows, python multiprocessing doesn't work out of the box because windows recursively creates subprocess. to fix, add `if __name__ == '__main__':` check (from https://stackoverflow.com/a/18205006)
+- nGPT_dataloader.py worked fine on both computers for ultrachat, but only in vscode terminal. in normal ubuntu terminal, it gives error that the shard file doesn't exist (???)
+- nGPT_train.py local learning rate kind of "resets" if you extend the training because of get_lr() decreasing local learning rate to 0. If you train 1 million steps and then train to 2 million steps, the local lr starts off around half and goes to 0, even though it already got to 0 for the 1 million step run (the max_iters used in get_lr() seems to only be the global script variable and not the command line variable, so if you only extend max_iters from command line it doesn't seem to work? or maybe I just forgot to override decay_iters in addition to max_iters)
 
 Recipe to convert Transformer to normalized Transformer [[source](https://arxiv.org/abs/2410.01131)] [[source](https://github.com/NVIDIA/ngpt)]:
 1. Remove all normalization layers (RMSNorm, LayerNorm, etc.), weight decay, and learning rate warmup.
@@ -31,11 +33,11 @@ $h ← h + MLP(RMSNorm(h))$ with\
 $h ← Norm( h + α_A (Norm(h_A) − Norm(h)) ),$\
 $h ← Norm( h + α_M (Norm(h_M) − Norm(h)) )$\
 where $α_A$ (and also $α_M$ ) is treated with $α_{A,init} = 0.05$ (in order of $1/nlayers$ ) and $α_{A,scale} = 1/ \sqrt{d_{model}}$.
-4. Change the softmax scaling factor in attention from $1/ \sqrt{d_k}$ to $\sqrt{d_k}$ . Implement scaling and normalization of attention:\
+1. Change the softmax scaling factor in attention from $1/ \sqrt{d_k}$ to $\sqrt{d_k}$ . Implement scaling and normalization of attention:\
 $q ← Norm(q)s_{qk}$\
 $k ← Norm(k)s_{qk}$,\
 where $s_{qk}$ is treated with $s_{qk,init} = 1$ and $s_{qk,scale} = 1/ dmodel$ .
-5. Implement scaling of MLP:\
+1. Implement scaling of MLP:\
 $uv ← uvs_{uv}\sqrt{d_{model}}$\
 where $s_{uv}$ is treated with $s_{uv,init} = 1$ and $s_{uv,scale} = 1$ .
 1. Implement the rescaling of output logits\

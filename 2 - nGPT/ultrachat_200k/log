@@ -1,0 +1,851 @@
+---
+COMMAND: 
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python 2\ -\ nGPT/nGPT_train.py >> 2\ -
+\ nGPT/ultrachat_200k/log --max_iters=1000000 --init_from='resume'
+
+OUTPUT:
+/home/santiago/Desktop/mechanical-offering/2 - nGPT/nGPT_train.py:287: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+
+Current Directory: /home/santiago/Desktop/mechanical-offering
+tokens per iteration will be: 24,576
+Overriding: max_iters = 1000000
+Overriding: init_from = resume
+found 2 shards for split train
+found 1 shards for split val
+Resuming training from /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+number of parameters: 29.96M
+Model initialization/loading time: 0.538820 sec
+num decayed parameter tensors: 26, with 29,949,952 parameters
+num non-decayed parameter tensors: 17, with 61,568 parameters
+using fused AdamW: True
+compiling the model... (takes a ~minute)
+learning_rate: 0.001500
+min_lr: 0.000000
+max_iters: 1000000.000000
+lr_decay_iters: 1500000.000000
+warmup_iters: 0.000000
+batch_size: 64.000000
+gradient_accumulation_steps: 1.000000
+block_size: 384.000000
+weight_decay: 0.000000
+Time spent: 3.0416553020477295 seconds
+starting_iter_num: 1000000
+step 1000000: train loss 3.989057, val loss 3.976793
+lr=0.000375
+iter 1000000: loss 4.160239, time 30669.26ms
+
+SAMPLING:
+<|endoftext|>From the New Orleans:
+It appears that in this case it could be found the population was just as much a problem as elsewhere in the United States. Many of the states are not in the same household. But it is interesting to think of how the population was different. The population was not so close to them. They were able to make an increase in numbers in the home environment, even as people began to settle. They went in front of the country to take a large amount of food and clean it. The whole increase in population will also be driven by immigrants coming from elsewhere. The migration patterns may well be influenced by immigrants, but there are some aspects in the country that are more serious. People from other countries are encouraged to stay close to these immigrant populations. People will continue to travel to places such as the United States from the United States after which they have come to know the status quo. There is a common misconception that some immigrants are actually doing good to people’s health and well. So far there is no scientific evidence. However, there are some of the facts about which immigrants are doing good to people in the country.
+What do I hope to say about them?
+All immigrants from the United States will come together on their own, but can make an effort to find ways to bring it together with the next generation. Some people would be willing to leave the country on account of it, or if it had to be more difficult to take measures. But this is a way of doing so, but what else to do about it? How to take this into consideration.
+One thing that you will do will be something new. In order to be open for the entire country, to be in the same situation as you think the immigrants will go up and increase and spread them to other countries’ jobs would be added (except for the labor workers in the city of Columbus,
+Time spent: 39.412129640579224 seconds
+
+---
+COMMAND:
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python 2\ -\ nGPT/nGPT_train.py >> 2\ -
+\ nGPT/ultrachat_200k/log --init_from='resume'
+
+OUTPUT:
+/home/santiago/Desktop/mechanical-offering/2 - nGPT/nGPT_train.py:287: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+
+Current Directory: /home/santiago/Desktop/mechanical-offering
+tokens per iteration will be: 24,576
+Overriding: init_from = resume
+found 2 shards for split train
+found 1 shards for split val
+Resuming training from /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+number of parameters: 29.96M
+Model initialization/loading time: 0.534920 sec
+num decayed parameter tensors: 26, with 29,949,952 parameters
+num non-decayed parameter tensors: 17, with 61,568 parameters
+using fused AdamW: True
+compiling the model... (takes a ~minute)
+learning_rate: 0.001500
+min_lr: 0.000000
+max_iters: 1500000.000000
+lr_decay_iters: 1515000.000000
+warmup_iters: 0.000000
+batch_size: 64.000000
+gradient_accumulation_steps: 1.000000
+block_size: 384.000000
+weight_decay: 0.000000
+Time spent: 2.9633257389068604 seconds
+starting_iter_num: 1000000
+step 1000000: train loss 3.989057, val loss 3.976793
+lr=0.000389
+iter 1000000: loss 4.160239, time 30875.62ms
+iter 1001000: loss 3.301703, time 98.28ms
+iter 1002000: loss 2.942097, time 96.87ms
+iter 1003000: loss 3.188718, time 96.62ms
+iter 1004000: loss 2.742277, time 96.98ms
+iter 1005000: loss 2.995903, time 96.90ms
+iter 1006000: loss 2.927221, time 97.41ms
+iter 1007000: loss 2.806293, time 97.19ms
+iter 1008000: loss 2.585777, time 97.25ms
+iter 1009000: loss 2.716202, time 97.14ms
+step 1010000: train loss 2.774795, val loss 2.820827
+lr=0.000375
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.242515 sec
+iter 1010000: loss 2.915045, time 25870.72ms
+iter 1011000: loss 2.868053, time 97.52ms
+iter 1012000: loss 2.684470, time 97.22ms
+iter 1013000: loss 2.483351, time 96.33ms
+iter 1014000: loss 2.679717, time 97.22ms
+iter 1015000: loss 2.768205, time 97.49ms
+iter 1016000: loss 2.714447, time 97.20ms
+iter 1017000: loss 2.975838, time 96.65ms
+iter 1018000: loss 2.794616, time 97.20ms
+iter 1019000: loss 2.796951, time 97.45ms
+step 1020000: train loss 2.729477, val loss 2.797226
+lr=0.000362
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.365534 sec
+iter 1020000: loss 2.814202, time 26101.20ms
+iter 1021000: loss 2.498541, time 97.03ms
+iter 1022000: loss 2.728228, time 97.18ms
+iter 1023000: loss 2.606081, time 97.09ms
+iter 1024000: loss 2.687101, time 97.36ms
+iter 1025000: loss 2.501822, time 97.13ms
+iter 1026000: loss 2.723504, time 97.05ms
+iter 1027000: loss 2.921611, time 96.76ms
+iter 1028000: loss 2.694610, time 97.17ms
+iter 1029000: loss 2.638492, time 96.97ms
+step 1030000: train loss 2.728362, val loss 2.787470
+lr=0.000348
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.384387 sec
+iter 1030000: loss 2.616196, time 26045.03ms
+iter 1031000: loss 2.878554, time 159.27ms
+iter 1032000: loss 2.687250, time 159.44ms
+iter 1033000: loss 2.826804, time 97.13ms
+iter 1034000: loss 2.746549, time 97.04ms
+iter 1035000: loss 2.863161, time 97.08ms
+iter 1036000: loss 2.667410, time 97.22ms
+iter 1037000: loss 2.715268, time 160.72ms
+iter 1038000: loss 2.740161, time 160.68ms
+iter 1039000: loss 2.508511, time 97.02ms
+step 1040000: train loss 2.714718, val loss 2.782254
+lr=0.000335
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.344143 sec
+iter 1040000: loss 2.990871, time 25984.11ms
+iter 1041000: loss 2.730155, time 97.09ms
+iter 1042000: loss 2.679490, time 97.08ms
+iter 1043000: loss 2.848635, time 97.17ms
+iter 1044000: loss 2.864147, time 97.29ms
+iter 1045000: loss 2.481457, time 97.32ms
+iter 1046000: loss 2.644680, time 97.24ms
+iter 1047000: loss 2.971565, time 97.20ms
+iter 1048000: loss 3.165990, time 97.10ms
+iter 1049000: loss 2.776459, time 96.98ms
+step 1050000: train loss 2.702790, val loss 2.780977
+lr=0.000322
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.537672 sec
+iter 1050000: loss 2.396684, time 26200.97ms
+iter 1051000: loss 2.682514, time 97.34ms
+iter 1052000: loss 2.405892, time 158.76ms
+iter 1053000: loss 2.517306, time 158.97ms
+iter 1054000: loss 2.872328, time 160.32ms
+iter 1055000: loss 2.785254, time 97.39ms
+iter 1056000: loss 2.572292, time 97.03ms
+iter 1057000: loss 2.727924, time 97.55ms
+iter 1058000: loss 2.717593, time 97.23ms
+iter 1059000: loss 2.416136, time 97.17ms
+step 1060000: train loss 2.679937, val loss 2.778836
+lr=0.000310
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.324077 sec
+iter 1060000: loss 2.366976, time 26187.58ms
+iter 1061000: loss 2.651831, time 97.20ms
+iter 1062000: loss 2.882506, time 97.28ms
+iter 1063000: loss 2.722177, time 98.22ms
+iter 1064000: loss 2.664935, time 97.23ms
+iter 1065000: loss 2.816775, time 97.25ms
+iter 1066000: loss 2.893569, time 97.21ms
+iter 1067000: loss 2.802728, time 97.25ms
+iter 1068000: loss 2.808956, time 97.17ms
+iter 1069000: loss 2.561964, time 97.16ms
+step 1070000: train loss 2.694684, val loss 2.775259
+lr=0.000297
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.462094 sec
+iter 1070000: loss 2.750652, time 26535.36ms
+iter 1071000: loss 2.869562, time 98.04ms
+iter 1072000: loss 2.624688, time 97.31ms
+iter 1073000: loss 2.454510, time 97.33ms
+iter 1074000: loss 2.802074, time 97.15ms
+iter 1075000: loss 2.695727, time 97.25ms
+iter 1076000: loss 2.744377, time 97.76ms
+iter 1077000: loss 2.551539, time 97.23ms
+iter 1078000: loss 2.889721, time 97.35ms
+iter 1079000: loss 2.565996, time 97.24ms
+step 1080000: train loss 2.674414, val loss 2.777447
+lr=0.000285
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.371754 sec
+iter 1080000: loss 2.422479, time 26025.46ms
+iter 1081000: loss 2.970310, time 97.35ms
+iter 1082000: loss 2.650239, time 97.48ms
+iter 1083000: loss 2.785515, time 97.36ms
+iter 1084000: loss 2.634152, time 97.36ms
+iter 1085000: loss 2.711287, time 97.41ms
+iter 1086000: loss 2.702092, time 97.28ms
+iter 1087000: loss 2.492074, time 97.23ms
+iter 1088000: loss 2.923469, time 97.40ms
+iter 1089000: loss 2.624325, time 97.15ms
+step 1090000: train loss 2.668601, val loss 2.771526
+lr=0.000273
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.447157 sec
+iter 1090000: loss 2.738800, time 26585.79ms
+iter 1091000: loss 2.610549, time 97.15ms
+iter 1092000: loss 2.514309, time 97.31ms
+iter 1093000: loss 2.365544, time 97.24ms
+iter 1094000: loss 2.654453, time 97.45ms
+iter 1095000: loss 2.710065, time 160.23ms
+iter 1096000: loss 2.681924, time 159.47ms
+iter 1097000: loss 2.784919, time 97.67ms
+iter 1098000: loss 2.714579, time 96.99ms
+iter 1099000: loss 2.634736, time 97.30ms
+step 1100000: train loss 2.679541, val loss 2.772134
+lr=0.000261
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.339288 sec
+iter 1100000: loss 2.665564, time 25977.21ms
+iter 1101000: loss 2.745679, time 97.30ms
+iter 1102000: loss 2.480827, time 97.28ms
+iter 1103000: loss 2.473499, time 97.27ms
+iter 1104000: loss 2.714906, time 97.55ms
+iter 1105000: loss 2.836893, time 97.40ms
+iter 1106000: loss 2.793579, time 97.32ms
+iter 1107000: loss 2.692295, time 97.27ms
+iter 1108000: loss 2.736887, time 97.18ms
+iter 1109000: loss 2.655354, time 97.36ms
+step 1110000: train loss 2.664124, val loss 2.769865
+lr=0.000249
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.416440 sec
+iter 1110000: loss 2.438792, time 26172.10ms
+iter 1111000: loss 2.520698, time 97.22ms
+iter 1112000: loss 2.586811, time 97.23ms
+iter 1113000: loss 2.619548, time 97.17ms
+iter 1114000: loss 2.588384, time 97.29ms
+iter 1115000: loss 3.017469, time 97.55ms
+iter 1116000: loss 2.677300, time 97.21ms
+iter 1117000: loss 2.483807, time 97.96ms
+iter 1118000: loss 2.697580, time 97.23ms
+iter 1119000: loss 2.456646, time 98.02ms
+step 1120000: train loss 2.662111, val loss 2.767712
+lr=0.000238
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.293556 sec
+iter 1120000: loss 2.796670, time 25940.12ms
+iter 1121000: loss 2.608514, time 97.22ms
+iter 1122000: loss 2.679811, time 97.08ms
+iter 1123000: loss 2.566117, time 97.19ms
+iter 1124000: loss 2.652659, time 96.97ms
+iter 1125000: loss 2.622156, time 96.64ms
+iter 1126000: loss 2.879921, time 97.04ms
+iter 1127000: loss 2.237663, time 97.05ms
+iter 1128000: loss 2.774305, time 97.16ms
+iter 1129000: loss 2.353080, time 97.00ms
+step 1130000: train loss 2.654976, val loss 2.766382
+lr=0.000227
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.226390 sec
+iter 1130000: loss 2.428743, time 26193.19ms
+iter 1131000: loss 2.571218, time 160.81ms
+iter 1132000: loss 2.586389, time 159.75ms
+iter 1133000: loss 2.638772, time 96.88ms
+iter 1134000: loss 2.708944, time 97.07ms
+iter 1135000: loss 2.791757, time 97.15ms
+iter 1136000: loss 2.940665, time 97.20ms
+iter 1137000: loss 2.697015, time 97.08ms
+iter 1138000: loss 2.385487, time 97.23ms
+iter 1139000: loss 2.383838, time 97.25ms
+step 1140000: train loss 2.639530, val loss 2.760845
+lr=0.000216
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.360958 sec
+iter 1140000: loss 2.502381, time 26055.78ms
+iter 1141000: loss 2.628458, time 97.29ms
+iter 1142000: loss 2.537300, time 97.20ms
+iter 1143000: loss 2.791456, time 97.00ms
+iter 1144000: loss 2.608812, time 97.26ms
+iter 1145000: loss 2.791124, time 97.24ms
+iter 1146000: loss 2.638945, time 97.06ms
+iter 1147000: loss 2.713011, time 97.26ms
+iter 1148000: loss 2.611817, time 97.16ms
+iter 1149000: loss 2.974501, time 97.13ms
+step 1150000: train loss 2.641698, val loss 2.764119
+lr=0.000205
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.439066 sec
+iter 1150000: loss 2.473886, time 26068.85ms
+iter 1151000: loss 2.499780, time 97.09ms
+iter 1152000: loss 2.736768, time 97.24ms
+iter 1153000: loss 2.951781, time 97.41ms
+iter 1154000: loss 2.471629, time 97.20ms
+iter 1155000: loss 2.763082, time 97.29ms
+iter 1156000: loss 2.455380, time 160.06ms
+iter 1157000: loss 2.879652, time 160.05ms
+iter 1158000: loss 2.560134, time 161.07ms
+iter 1159000: loss 2.589223, time 97.29ms
+step 1160000: train loss 2.636541, val loss 2.762714
+lr=0.000194
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.289501 sec
+iter 1160000: loss 2.463995, time 25931.29ms
+iter 1161000: loss 2.659575, time 161.15ms
+iter 1162000: loss 2.837445, time 97.36ms
+iter 1163000: loss 2.510135, time 97.16ms
+iter 1164000: loss 2.491019, time 97.44ms
+iter 1165000: loss 2.411325, time 97.18ms
+iter 1166000: loss 2.471809, time 97.25ms
+iter 1167000: loss 2.550502, time 97.15ms
+iter 1168000: loss 2.576679, time 97.21ms
+iter 1169000: loss 2.539723, time 97.04ms
+step 1170000: train loss 2.642829, val loss 2.761967
+lr=0.000184
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.500614 sec
+iter 1170000: loss 2.598943, time 26336.08ms
+iter 1171000: loss 2.432777, time 97.24ms
+iter 1172000: loss 2.639860, time 97.52ms
+iter 1173000: loss 2.329883, time 97.29ms
+iter 1174000: loss 2.699018, time 97.22ms
+iter 1175000: loss 2.759064, time 97.14ms
+iter 1176000: loss 2.671830, time 97.27ms
+iter 1177000: loss 2.304188, time 97.43ms
+iter 1178000: loss 2.880064, time 97.44ms
+iter 1179000: loss 2.396761, time 97.15ms
+step 1180000: train loss 2.639887, val loss 2.759520
+lr=0.000174
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.342991 sec
+iter 1180000: loss 2.410728, time 26095.79ms
+iter 1181000: loss 2.637050, time 97.26ms
+iter 1182000: loss 2.572224, time 97.51ms
+iter 1183000: loss 2.703402, time 97.60ms
+iter 1184000: loss 2.453693, time 97.34ms
+iter 1185000: loss 2.792892, time 96.36ms
+iter 1186000: loss 2.946556, time 97.47ms
+iter 1187000: loss 2.723050, time 97.24ms
+iter 1188000: loss 2.461632, time 97.18ms
+iter 1189000: loss 2.407098, time 97.28ms
+step 1190000: train loss 2.637787, val loss 2.757704
+lr=0.000164
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.400913 sec
+iter 1190000: loss 2.495748, time 26149.69ms
+iter 1191000: loss 2.797543, time 160.56ms
+iter 1192000: loss 2.647908, time 96.48ms
+iter 1193000: loss 2.836801, time 97.37ms
+iter 1194000: loss 2.717475, time 97.33ms
+iter 1195000: loss 2.713951, time 97.32ms
+iter 1196000: loss 2.393314, time 97.35ms
+iter 1197000: loss 2.696337, time 97.30ms
+iter 1198000: loss 2.751606, time 97.27ms
+iter 1199000: loss 2.399140, time 97.21ms
+step 1200000: train loss 2.625540, val loss 2.757215
+lr=0.000154
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.337179 sec
+iter 1200000: loss 2.498815, time 26187.17ms
+iter 1201000: loss 2.677816, time 97.30ms
+iter 1202000: loss 2.519983, time 97.42ms
+iter 1203000: loss 2.446231, time 97.06ms
+iter 1204000: loss 2.681292, time 97.29ms
+iter 1205000: loss 2.663584, time 97.18ms
+iter 1206000: loss 2.469036, time 97.80ms
+iter 1207000: loss 3.079840, time 97.28ms
+iter 1208000: loss 2.453030, time 97.48ms
+iter 1209000: loss 2.434062, time 97.49ms
+step 1210000: train loss 2.607809, val loss 2.754757
+lr=0.000145
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.235165 sec
+iter 1210000: loss 2.596577, time 25880.68ms
+iter 1211000: loss 2.831748, time 97.28ms
+iter 1212000: loss 2.529812, time 97.52ms
+iter 1213000: loss 2.517464, time 97.19ms
+iter 1214000: loss 2.702038, time 96.41ms
+iter 1215000: loss 3.018453, time 97.41ms
+iter 1216000: loss 2.684447, time 96.54ms
+iter 1217000: loss 2.451474, time 97.14ms
+iter 1218000: loss 2.620278, time 97.22ms
+iter 1219000: loss 2.786595, time 97.20ms
+step 1220000: train loss 2.614423, val loss 2.756045
+lr=0.000136
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.259801 sec
+iter 1220000: loss 2.693965, time 26031.78ms
+iter 1221000: loss 2.570745, time 97.44ms
+iter 1222000: loss 2.699131, time 97.57ms
+iter 1223000: loss 2.711285, time 97.22ms
+iter 1224000: loss 2.690181, time 97.29ms
+iter 1225000: loss 2.942107, time 97.22ms
+iter 1226000: loss 2.337239, time 160.04ms
+iter 1227000: loss 2.810503, time 160.95ms
+iter 1228000: loss 2.663417, time 97.19ms
+iter 1229000: loss 2.634665, time 97.20ms
+step 1230000: train loss 2.610398, val loss 2.755746
+lr=0.000127
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.303136 sec
+iter 1230000: loss 2.655973, time 25963.16ms
+iter 1231000: loss 2.906768, time 97.18ms
+iter 1232000: loss 2.719956, time 97.26ms
+iter 1233000: loss 2.736208, time 97.04ms
+iter 1234000: loss 2.768044, time 96.95ms
+iter 1235000: loss 2.601473, time 97.33ms
+iter 1236000: loss 2.236536, time 97.14ms
+iter 1237000: loss 2.679005, time 97.15ms
+iter 1238000: loss 2.241849, time 97.17ms
+iter 1239000: loss 2.652291, time 96.90ms
+step 1240000: train loss 2.620118, val loss 2.754369
+lr=0.000119
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.338777 sec
+iter 1240000: loss 2.501765, time 26011.36ms
+iter 1241000: loss 2.729982, time 97.21ms
+iter 1242000: loss 2.867232, time 97.14ms
+iter 1243000: loss 2.645655, time 97.08ms
+iter 1244000: loss 2.593624, time 97.20ms
+iter 1245000: loss 2.326931, time 97.16ms
+iter 1246000: loss 2.665834, time 160.70ms
+iter 1247000: loss 2.605832, time 96.95ms
+iter 1248000: loss 2.650084, time 96.96ms
+iter 1249000: loss 2.394901, time 97.16ms
+step 1250000: train loss 2.621209, val loss 2.753688
+lr=0.000110
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.267635 sec
+iter 1250000: loss 2.765082, time 26395.13ms
+iter 1251000: loss 2.801956, time 97.36ms
+iter 1252000: loss 2.851837, time 97.32ms
+iter 1253000: loss 2.769595, time 98.90ms
+iter 1254000: loss 2.430251, time 97.26ms
+iter 1255000: loss 2.668035, time 97.83ms
+iter 1256000: loss 2.567826, time 97.31ms
+iter 1257000: loss 2.690843, time 97.27ms
+iter 1258000: loss 2.469279, time 96.69ms
+iter 1259000: loss 2.752819, time 96.56ms
+step 1260000: train loss 2.606092, val loss 2.753618
+lr=0.000102
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.448018 sec
+iter 1260000: loss 2.481293, time 26122.16ms
+iter 1261000: loss 2.676273, time 160.05ms
+iter 1262000: loss 2.600528, time 169.94ms
+iter 1263000: loss 2.391910, time 97.59ms
+iter 1264000: loss 2.767236, time 97.30ms
+iter 1265000: loss 2.897674, time 97.24ms
+iter 1266000: loss 2.524354, time 97.41ms
+iter 1267000: loss 2.608026, time 97.19ms
+iter 1268000: loss 2.837817, time 97.32ms
+iter 1269000: loss 2.693719, time 97.29ms
+step 1270000: train loss 2.588837, val loss 2.752825
+lr=0.000095
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.384494 sec
+iter 1270000: loss 2.480201, time 26054.77ms
+iter 1271000: loss 2.431835, time 97.26ms
+iter 1272000: loss 2.892281, time 97.21ms
+iter 1273000: loss 2.492154, time 97.17ms
+iter 1274000: loss 2.718327, time 97.22ms
+iter 1275000: loss 2.473132, time 97.25ms
+iter 1276000: loss 2.456669, time 96.38ms
+iter 1277000: loss 2.923018, time 97.08ms
+iter 1278000: loss 2.460351, time 160.63ms
+iter 1279000: loss 2.844662, time 161.42ms
+step 1280000: train loss 2.608066, val loss 2.752579
+lr=0.000087
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.228855 sec
+iter 1280000: loss 2.651084, time 25966.64ms
+iter 1281000: loss 2.561418, time 159.90ms
+iter 1282000: loss 2.736867, time 160.26ms
+iter 1283000: loss 2.536159, time 159.94ms
+iter 1284000: loss 2.419612, time 160.08ms
+iter 1285000: loss 2.557570, time 160.10ms
+iter 1286000: loss 2.618151, time 160.58ms
+iter 1287000: loss 2.614635, time 98.44ms
+iter 1288000: loss 2.382182, time 97.28ms
+iter 1289000: loss 2.549452, time 97.11ms
+step 1290000: train loss 2.604319, val loss 2.752612
+lr=0.000080
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.263173 sec
+iter 1290000: loss 2.284607, time 26027.51ms
+iter 1291000: loss 2.762524, time 159.66ms
+iter 1292000: loss 2.420806, time 161.07ms
+iter 1293000: loss 2.781397, time 97.21ms
+iter 1294000: loss 2.457977, time 97.20ms
+iter 1295000: loss 2.680809, time 97.28ms
+iter 1296000: loss 2.828411, time 96.80ms
+iter 1297000: loss 2.708719, time 97.32ms
+iter 1298000: loss 2.749715, time 97.20ms
+iter 1299000: loss 2.507582, time 97.23ms
+step 1300000: train loss 2.598609, val loss 2.751780
+lr=0.000073
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.289653 sec
+iter 1300000: loss 2.441906, time 25961.58ms
+iter 1301000: loss 2.193735, time 97.62ms
+iter 1302000: loss 2.594626, time 97.20ms
+iter 1303000: loss 2.512634, time 96.98ms
+iter 1304000: loss 2.783953, time 97.14ms
+iter 1305000: loss 2.292133, time 97.22ms
+iter 1306000: loss 2.710323, time 97.25ms
+iter 1307000: loss 2.451171, time 97.63ms
+iter 1308000: loss 2.453224, time 97.27ms
+iter 1309000: loss 2.680132, time 97.08ms
+step 1310000: train loss 2.582087, val loss 2.753420
+lr=0.000067
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.447533 sec
+iter 1310000: loss 2.797624, time 26318.25ms
+iter 1311000: loss 2.562650, time 97.03ms
+iter 1312000: loss 2.632340, time 97.29ms
+iter 1313000: loss 2.619330, time 96.49ms
+iter 1314000: loss 2.651417, time 97.24ms
+iter 1315000: loss 2.667618, time 97.21ms
+iter 1316000: loss 2.532019, time 160.00ms
+iter 1317000: loss 2.607242, time 160.80ms
+iter 1318000: loss 2.491280, time 97.30ms
+iter 1319000: loss 2.810980, time 97.90ms
+step 1320000: train loss 2.596104, val loss 2.752273
+lr=0.000060
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.442701 sec
+iter 1320000: loss 2.594052, time 26482.71ms
+iter 1321000: loss 2.429238, time 97.41ms
+iter 1322000: loss 2.720974, time 97.55ms
+iter 1323000: loss 2.514737, time 98.83ms
+iter 1324000: loss 2.429001, time 98.15ms
+iter 1325000: loss 2.473675, time 97.37ms
+iter 1326000: loss 2.573106, time 96.73ms
+iter 1327000: loss 2.541555, time 97.04ms
+iter 1328000: loss 2.489998, time 97.22ms
+iter 1329000: loss 2.935071, time 96.54ms
+step 1330000: train loss 2.580961, val loss 2.754015
+lr=0.000055
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.265574 sec
+iter 1330000: loss 2.660833, time 26060.63ms
+iter 1331000: loss 2.265706, time 98.13ms
+iter 1332000: loss 2.614526, time 97.38ms
+iter 1333000: loss 2.609472, time 97.31ms
+iter 1334000: loss 2.581143, time 97.34ms
+iter 1335000: loss 2.737192, time 98.03ms
+iter 1336000: loss 2.588001, time 97.29ms
+iter 1337000: loss 2.636485, time 98.33ms
+iter 1338000: loss 2.835277, time 97.44ms
+iter 1339000: loss 2.313980, time 97.47ms
+step 1340000: train loss 2.585912, val loss 2.754030
+lr=0.000049
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.375968 sec
+iter 1340000: loss 2.590841, time 26149.70ms
+iter 1341000: loss 2.572242, time 97.44ms
+iter 1342000: loss 2.573584, time 97.47ms
+iter 1343000: loss 2.522408, time 97.42ms
+iter 1344000: loss 2.539956, time 97.26ms
+iter 1345000: loss 2.482064, time 97.30ms
+iter 1346000: loss 2.698469, time 97.28ms
+iter 1347000: loss 2.426937, time 97.26ms
+iter 1348000: loss 2.669859, time 97.17ms
+iter 1349000: loss 2.564176, time 97.63ms
+step 1350000: train loss 2.593527, val loss 2.752261
+lr=0.000043
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.292080 sec
+iter 1350000: loss 2.743632, time 26091.98ms
+iter 1351000: loss 2.641806, time 97.31ms
+iter 1352000: loss 2.587106, time 97.24ms
+iter 1353000: loss 2.646619, time 97.21ms
+iter 1354000: loss 2.556887, time 97.24ms
+iter 1355000: loss 2.991587, time 97.21ms
+iter 1356000: loss 2.589113, time 97.37ms
+iter 1357000: loss 2.655732, time 97.95ms
+iter 1358000: loss 2.517366, time 97.33ms
+iter 1359000: loss 2.461333, time 97.44ms
+step 1360000: train loss 2.584952, val loss 2.753806
+lr=0.000038
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.545944 sec
+iter 1360000: loss 2.460932, time 26251.55ms
+iter 1361000: loss 2.289695, time 97.53ms
+iter 1362000: loss 2.611571, time 97.57ms
+iter 1363000: loss 2.682364, time 97.17ms
+iter 1364000: loss 2.623235, time 97.22ms
+iter 1365000: loss 2.385870, time 97.21ms
+iter 1366000: loss 2.729585, time 97.24ms
+iter 1367000: loss 2.670021, time 97.43ms
+iter 1368000: loss 2.487126, time 97.33ms
+iter 1369000: loss 2.840278, time 97.22ms
+step 1370000: train loss 2.587533, val loss 2.754920
+lr=0.000034
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.311276 sec
+iter 1370000: loss 2.562117, time 26107.59ms
+iter 1371000: loss 2.389256, time 96.77ms
+iter 1372000: loss 2.745977, time 97.29ms
+iter 1373000: loss 2.488959, time 97.34ms
+iter 1374000: loss 2.653333, time 97.30ms
+iter 1375000: loss 2.383877, time 97.42ms
+iter 1376000: loss 2.514100, time 97.67ms
+iter 1377000: loss 2.796488, time 97.64ms
+iter 1378000: loss 2.506362, time 97.21ms
+iter 1379000: loss 2.449226, time 97.39ms
+step 1380000: train loss 2.585000, val loss 2.754793
+lr=0.000029
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.060688 sec
+iter 1380000: loss 2.765654, time 25993.85ms
+iter 1381000: loss 2.263880, time 97.43ms
+iter 1382000: loss 2.937511, time 97.25ms
+iter 1383000: loss 2.471160, time 97.47ms
+iter 1384000: loss 2.617156, time 97.36ms
+iter 1385000: loss 2.274242, time 97.42ms
+iter 1386000: loss 2.742971, time 97.28ms
+iter 1387000: loss 2.497412, time 97.36ms
+iter 1388000: loss 2.463248, time 97.30ms
+iter 1389000: loss 2.410380, time 97.02ms
+step 1390000: train loss 2.574416, val loss 2.754623
+lr=0.000025
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.294499 sec
+iter 1390000: loss 2.801027, time 25987.76ms
+iter 1391000: loss 2.583880, time 97.23ms
+iter 1392000: loss 2.358531, time 97.48ms
+iter 1393000: loss 0.629566, time 97.27ms
+iter 1394000: loss 2.430718, time 97.31ms
+iter 1395000: loss 2.544071, time 97.42ms
+iter 1396000: loss 2.540926, time 97.36ms
+iter 1397000: loss 2.529804, time 97.24ms
+iter 1398000: loss 2.541848, time 97.21ms
+iter 1399000: loss 2.618931, time 97.44ms
+step 1400000: train loss 2.575532, val loss 2.754575
+lr=0.000021
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.344839 sec
+iter 1400000: loss 2.811637, time 26114.41ms
+iter 1401000: loss 2.426653, time 96.85ms
+iter 1402000: loss 2.289993, time 97.40ms
+iter 1403000: loss 2.375424, time 97.24ms
+iter 1404000: loss 2.499344, time 97.39ms
+iter 1405000: loss 2.378828, time 97.26ms
+iter 1406000: loss 2.564647, time 97.15ms
+iter 1407000: loss 2.785266, time 97.40ms
+iter 1408000: loss 2.462814, time 97.40ms
+iter 1409000: loss 2.352602, time 96.71ms
+step 1410000: train loss 2.572444, val loss 2.755192
+lr=0.000018
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.396297 sec
+iter 1410000: loss 2.581417, time 26198.28ms
+iter 1411000: loss 2.640445, time 97.26ms
+iter 1412000: loss 2.854855, time 97.38ms
+iter 1413000: loss 2.477229, time 97.37ms
+iter 1414000: loss 2.540420, time 97.26ms
+iter 1415000: loss 2.653968, time 97.27ms
+iter 1416000: loss 2.610380, time 97.25ms
+iter 1417000: loss 2.414165, time 97.36ms
+iter 1418000: loss 2.622992, time 97.08ms
+iter 1419000: loss 2.597322, time 97.26ms
+step 1420000: train loss 2.581442, val loss 2.756378
+lr=0.000015
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.208580 sec
+iter 1420000: loss 2.660238, time 25921.28ms
+iter 1421000: loss 2.777592, time 96.99ms
+iter 1422000: loss 2.559024, time 96.54ms
+iter 1423000: loss 2.700272, time 97.55ms
+iter 1424000: loss 2.563381, time 97.22ms
+iter 1425000: loss 2.418104, time 97.38ms
+iter 1426000: loss 2.685606, time 97.41ms
+iter 1427000: loss 2.499471, time 97.45ms
+iter 1428000: loss 2.537854, time 97.22ms
+iter 1429000: loss 2.552027, time 97.38ms
+step 1430000: train loss 2.584769, val loss 2.756907
+lr=0.000012
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.582788 sec
+iter 1430000: loss 2.654234, time 26381.57ms
+iter 1431000: loss 2.653780, time 97.39ms
+iter 1432000: loss 2.640779, time 97.25ms
+iter 1433000: loss 2.517138, time 97.44ms
+iter 1434000: loss 2.450465, time 96.69ms
+iter 1435000: loss 2.893755, time 98.78ms
+iter 1436000: loss 2.639087, time 97.25ms
+iter 1437000: loss 2.665468, time 97.27ms
+iter 1438000: loss 2.644732, time 97.77ms
+iter 1439000: loss 2.569541, time 97.43ms
+step 1440000: train loss 2.587024, val loss 2.757786
+lr=0.000009
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.499127 sec
+iter 1440000: loss 2.803931, time 26149.03ms
+iter 1441000: loss 2.583622, time 97.20ms
+iter 1442000: loss 2.539162, time 97.26ms
+iter 1443000: loss 2.803791, time 97.24ms
+iter 1444000: loss 2.850924, time 97.38ms
+iter 1445000: loss 2.423932, time 96.21ms
+iter 1446000: loss 2.339117, time 97.23ms
+iter 1447000: loss 2.597709, time 97.14ms
+iter 1448000: loss 2.858859, time 97.56ms
+iter 1449000: loss 2.622092, time 97.53ms
+step 1450000: train loss 2.574525, val loss 2.758504
+lr=0.000007
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.228679 sec
+iter 1450000: loss 2.862702, time 25998.28ms
+iter 1451000: loss 2.519173, time 97.48ms
+iter 1452000: loss 2.652968, time 97.11ms
+iter 1453000: loss 2.534985, time 97.32ms
+iter 1454000: loss 2.627843, time 97.18ms
+iter 1455000: loss 2.735003, time 96.99ms
+iter 1456000: loss 2.575833, time 97.12ms
+iter 1457000: loss 2.408210, time 97.40ms
+iter 1458000: loss 2.550668, time 97.15ms
+iter 1459000: loss 2.722317, time 97.23ms
+step 1460000: train loss 2.578596, val loss 2.758758
+lr=0.000005
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.264323 sec
+iter 1460000: loss 2.572308, time 26043.69ms
+iter 1461000: loss 2.759398, time 97.33ms
+iter 1462000: loss 2.790314, time 97.23ms
+iter 1463000: loss 2.325797, time 97.44ms
+iter 1464000: loss 2.668011, time 97.22ms
+iter 1465000: loss 2.469056, time 97.80ms
+iter 1466000: loss 2.214597, time 97.32ms
+iter 1467000: loss 2.655252, time 97.29ms
+iter 1468000: loss 2.337786, time 97.31ms
+iter 1469000: loss 2.651341, time 96.56ms
+step 1470000: train loss 2.582659, val loss 2.759223
+lr=0.000003
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.800037 sec
+iter 1470000: loss 2.530894, time 26546.76ms
+iter 1471000: loss 3.023407, time 97.08ms
+iter 1472000: loss 2.678351, time 97.28ms
+iter 1473000: loss 2.450442, time 97.18ms
+iter 1474000: loss 2.537355, time 97.13ms
+iter 1475000: loss 2.250475, time 97.26ms
+iter 1476000: loss 2.359213, time 97.09ms
+iter 1477000: loss 2.851005, time 97.12ms
+iter 1478000: loss 2.836146, time 97.21ms
+iter 1479000: loss 2.615418, time 97.14ms
+step 1480000: train loss 2.576895, val loss 2.759620
+lr=0.000002
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.193956 sec
+iter 1480000: loss 2.349133, time 25968.01ms
+iter 1481000: loss 2.826720, time 96.40ms
+iter 1482000: loss 2.517331, time 97.18ms
+iter 1483000: loss 2.516975, time 97.27ms
+iter 1484000: loss 2.444082, time 97.01ms
+iter 1485000: loss 2.503960, time 96.69ms
+iter 1486000: loss 2.848202, time 98.60ms
+iter 1487000: loss 2.405447, time 97.13ms
+iter 1488000: loss 2.681825, time 97.14ms
+iter 1489000: loss 2.507317, time 97.14ms
+step 1490000: train loss 2.585687, val loss 2.759644
+lr=0.000001
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.266212 sec
+iter 1490000: loss 2.673079, time 25914.60ms
+iter 1491000: loss 2.714085, time 96.58ms
+iter 1492000: loss 2.616755, time 96.86ms
+iter 1493000: loss 2.390547, time 97.12ms
+iter 1494000: loss 2.763032, time 97.34ms
+iter 1495000: loss 2.776038, time 97.02ms
+iter 1496000: loss 2.438890, time 97.12ms
+iter 1497000: loss 2.570439, time 97.18ms
+iter 1498000: loss 2.617640, time 97.15ms
+iter 1499000: loss 2.394230, time 96.93ms
+step 1500000: train loss 2.591306, val loss 2.759717
+lr=0.000000
+saving checkpoint to /home/santiago/Desktop/mechanical-offering/2 - nGPT/ultrachat_200k
+Checkpoint saving time: 4.442539 sec
+iter 1500000: loss 2.696521, time 26399.02ms
+
+SAMPLING:
+<|endoftext|>The most powerful tools in the world were the “light” tool for creating high-quality images by cutting large, digital shapes as needed. The use of mobile in the last 100 years led to an improvement in the effectiveness of digital images. The design of the first image was the “light” tool, which allowed for quick and easy editing of images and illustrations.
+The process led to an increase in the user’s awareness and conversion to the image. Although a number of large numbers were revealed on the page, more were needed, and so in the final round, a bit increased the user’s focus. After more users were spent researching and interpreting these findings, they quickly achieved a significant increase in the quality of their images.
+The result of the process was an impressive 3M image – an accurate, accurate image that captured the eye’s eye’s attention without a big picture. With no specific visual or clear image image, the images were very strong enough to capture all the details and that it seemed to be relevant to the user’s experience with your image. The user is able to quickly and efficiently understand and interpret the image and its details, showing that it had the most important image of the image.
+The 3M image enabled the user to interact with the image and, for the first time, quickly and accurately, the image in a real image is not available, but there would be a lot more complex details in that image. The images will appear quickly in the second and third-party library, with no other required feature or design. A lot more complex details in the third and fourth-party library, are not available in the third-party library, but they have much more complex and more complex details.
+The final round was an accurate image image using one of the above, so in the third-built image, it
+Time spent: 52359.35766625404 seconds
+
+---
+COMMAND:
+nvidia-smi
+
+OUTPUT:
+Sat Apr 19 18:46:33 2025       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 550.144.03             Driver Version: 550.144.03     CUDA Version: 12.4     |
+|-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 3090 Ti     Off |   00000000:06:00.0  On |                  Off |
+| 92%   76C    P2            412W /  450W |   23931MiB /  24564MiB |     99%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+                                                                                         
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI        PID   Type   Process name                              GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A      2108      G   /usr/lib/xorg/Xorg                             97MiB |
+|    0   N/A  N/A      2333      G   /usr/bin/gnome-shell                           28MiB |
+|    0   N/A  N/A     16692      G   ...erProcess --variations-seed-version         51MiB |
+|    0   N/A  N/A     22572      C   python                                      23734MiB |
++-----------------------------------------------------------------------------------------+
+
+---
+COMMAND: 
+python nGPT_train.py (with eval_only = True and dataset = 'edu_fineweb10B)
+
+OUTPUT:
+Current Directory: /home/santiago/Desktop/mechanical-offering
+tokens per iteration will be: 24,576
+found 99 shards for split train
+found 1 shards for split val
+Resuming training from /home/santiago/Desktop/mechanical-offering/2 - nGPT/edu_fineweb10B
+/home/santiago/Desktop/mechanical-offering/2 - nGPT/nGPT_train.py:287: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(ckpt_path, map_location=device)
+number of parameters: 29.96M
+Model initialization/loading time: 0.536952 sec
+num decayed parameter tensors: 26, with 29,949,952 parameters
+num non-decayed parameter tensors: 17, with 61,568 parameters
+using fused AdamW: True
+learning_rate: 0.001500
+min_lr: 0.000000
+max_iters: 1500000.000000
+lr_decay_iters: 1515000.000000
+warmup_iters: 0.000000
+batch_size: 64.000000
+gradient_accumulation_steps: 1.000000
+block_size: 384.000000
+weight_decay: 0.000000
+Time spent: 2.948751449584961 seconds
+starting_iter_num: 1000000
+step 1000000: train loss 3.979168, val loss 3.941213
+lr=0.000389
+HellaSwag accuracy: 2579/10042=0.2568
+
+CONVERSATION BEGINS (type 'exit()' to quit)
+>>> exit()
+Time spent: 245.17582893371582 seconds
