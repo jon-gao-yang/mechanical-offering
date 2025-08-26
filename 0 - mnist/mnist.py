@@ -1,4 +1,3 @@
-# based on https://github.com/pytorch/examples/blob/main/mnist/main.py
 import numpy as np, matplotlib.pyplot as plt, time, os, torch
 
 ###### [ 1/3 : MODEL INITIALIZATION ] ######
@@ -42,6 +41,7 @@ def plot_kaggle_data(X, y, model, predict=False):
         # Display the label above the image
         ax.set_title(f"{y[random_index].item()},{yhat.item()}",fontsize=10)
         ax.set_axis_off()
+
     fig.suptitle("Label, yhat", fontsize=14)
     plt.show()
 
@@ -61,26 +61,27 @@ def write_kaggle_submission(model):
 ###### [ 3/3 : MAIN FUNCTION ] ######
 
 model = Model()
-steps = 1000
+steps = 1024
+batch_size = 512
 optimizer = torch.optim.AdamW(model.parameters())
 lossFunc = torch.nn.CrossEntropyLoss()
 
 # loading data from file, then splitting into labels (first col) and pixel vals
 data_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'datasets/digit-recognizer/train.csv')
 [y, X] = np.split(np.loadtxt(data_dir, dtype = int, delimiter = ',', skiprows = 1), [1], axis = 1)
-y, X = torch.Tensor(np.squeeze(y)), torch.Tensor(X).reshape(-1, 1, 28, 28)
+y, X = torch.Tensor(np.squeeze(y)).long(), torch.Tensor(X).reshape(-1, 1, 28, 28)
 
-X = (X - torch.mean(X))/torch.std(X) # data normalization
 print('TRAINING BEGINS (with', sum(p.numel() for p in model.parameters()), 'parameters)')
 startTime = time.time()
 
 # optimization
 for k in range(steps):
 
-    randint = torch.randint(low = 0, high = X.shape[0], size = (1,)).item()
+    randint = torch.randint(low = 0, high = X.shape[0], size = (batch_size,))
     
     # forward
-    total_loss = lossFunc(model.forward(X[randint]), y[randint].reshape((1,)).to(dtype=torch.long))
+    # acc = sum(model(X[randint]).argmax(axis=1) == y[randint]) * 100 / batch_size # skip line for speed
+    total_loss = lossFunc(model(X[randint]), y[randint])
 
     # backward
     optimizer.zero_grad()
@@ -89,6 +90,9 @@ for k in range(steps):
     # update parameters
     optimizer.step()
 
+    # if k % 100 == 0: # skip line for speed
+    #     print(f"loss: {total_loss.item():6.2f} accuracy: {acc:5.2f}%") # skip line for speed
+
 print('TRAINING COMPLETE (in', time.time() - startTime, 'sec)')
 plot_kaggle_data(X, y, model, predict = True) # model demo
-# write_kaggle_submission(model) # model usage
+write_kaggle_submission(model) # model usage
