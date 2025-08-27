@@ -11,8 +11,7 @@ mechanical offering: an endlessly rising repository
 ---
 
 Notes:
-- "Run and Debug" mode in VScode causes an error at the end of programs that use tinygrad, but normal VScode running or command line python running work normally
-- tinygrad optimizers use Tensor.assign(self, x) which can only assign floats to x for some reason, so all params need to be float (???)
+- just use pytorch (less online support, "Run and Debug" mode in VScode causes an error at the end of programs that use tinygrad, tinygrad optimizers use Tensor.assign(self, x) which can only assign floats to x for some reason, so all params need to be float)
 - `pip install datasets` for huggingface datasets
 - `pip install tiktoken` for tiktoken tokenizer library
 - `pip install flash-attn --no-build-isolation` for [flash-attention](https://github.com/Dao-AILab/flash-attention)
@@ -23,6 +22,7 @@ Notes:
 - on windows, python multiprocessing doesn't work out of the box because windows recursively creates subprocess. to fix, add `if __name__ == '__main__':` check (from https://stackoverflow.com/a/18205006)
 - nGPT_dataloader.py worked fine on both computers for ultrachat, but only in vscode terminal. in normal ubuntu terminal, it gives error that the shard file doesn't exist (???)
 - nGPT_train.py local learning rate kind of "resets" if you extend the training because of get_lr() decreasing local learning rate to 0. If you train 1 million steps and then train to 2 million steps, the local lr starts off around half and goes to 0, even though it already got to 0 for the 1 million step run (the max_iters used in get_lr() seems to only be the global script variable and not the command line variable, so if you only extend max_iters from command line it doesn't seem to work? or maybe I just forgot to override decay_iters in addition to max_iters)
+- huggingface GRPO trainer from trl library seems to need huggingface transformer models to work. llama models require signing up on their model page and waiting for approval before loading those models.
 
 Recipe to convert Transformer to normalized Transformer [[source](https://arxiv.org/abs/2410.01131)] [[source](https://github.com/NVIDIA/ngpt)]:
 1. Remove all normalization layers (RMSNorm, LayerNorm, etc.), weight decay, and learning rate warmup.
@@ -45,5 +45,6 @@ $z ← zs_z$\
 where $s_z$ is treated with $s_{z,init} = 1$ and
 $s_{z,scale} = 1/ dmodel$ .
 
-NOTE:
+TODO:
 - use better tokenizer next time (gpt2 doesn't have imstart, imstep, imhead special tokens for fine tuning)
+- figure out wandb so I can watch rl progress remotely
