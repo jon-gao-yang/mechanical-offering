@@ -1,0 +1,6 @@
+---
+COMMAND: 
+PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True python 3\ -\ RL/train_grpo.py >> 3\ -
+\ RL/log
+
+OUTPUT:

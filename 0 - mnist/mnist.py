@@ -95,4 +95,4 @@ for k in range(steps):
 
 print('TRAINING COMPLETE (in', time.time() - startTime, 'sec)')
 plot_kaggle_data(X, y, model, predict = True) # model demo
-write_kaggle_submission(model) # model usage
+#write_kaggle_submission(model) # model usage
