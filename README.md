@@ -46,4 +46,14 @@ $z ← zs_z$\
 where $s_z$ is treated with $s_{z,init} = 1$ and
 $s_{z,scale} = 1/ dmodel$ .
 
+OpenWebUI:
+1. sudo snap install curl
+2. curl -LsSf https://astral.sh/uv/install.sh | sh
+3. DATA_DIR=~/.open-webui uvx --python 3.11 open-webui@latest serve
+4. make account
+5. settings --> admin settings --> connections --> add openAI connection
+    hugging face side:
+6. pip install transformers[serving]
+7. transformers serve --enable-cors
+
 TODO:
